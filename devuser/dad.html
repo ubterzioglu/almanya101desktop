@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../img/icons/headericon.png" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>DevUser Admin - almanya101</title>
+  <link rel="stylesheet" href="devuseradmin.css" />
+  <style>
+    .login-grid {
+      grid-template-columns: 1fr 1fr auto;
+    }
+
+    @media (max-width: 900px) {
+      .login-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .wa-link {
+      color: #8ecfff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .wa-link:hover {
+      color: #b1deff;
+    }
+
+    .linkedin-link {
+      color: #8ecfff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .linkedin-link:hover {
+      color: #b1deff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card hero">
+      <div class="domain">almanya101.de</div>
+      <h1>DevUser Admin Panel</h1>
+    </div>
+
+    <div class="card" id="loginCard">
+      <div class="login-grid">
+        <input class="input" id="adminEmailInput" type="email" placeholder="Admin email (opsiyonel)" autocomplete="off" />
+        <input class="input" id="adminKeyInput" type="password" placeholder="Sifre / Admin key" autocomplete="off" />
+        <button class="btn-primary" id="loginBtn" type="button">Panele Gir</button>
+      </div>
+      <div class="status" id="loginStatus"></div>
+    </div>
+
+    <div id="panel" style="display:none;">
+      <div class="card">
+        <div class="row" style="justify-content: space-between; align-items:center;">
+          <strong>Admin oturumu a&#231;&#305;k</strong>
+          <div class="row">
+            <a class="btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center;" href="list.html">Listeye D&#246;n</a>
+            <button class="btn-secondary" id="logoutBtn" type="button">&#199;&#305;k&#305;&#351;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card stats" id="statsGrid">
+        <div class="stat-box">
+          <div class="stat-label">Toplam</div>
+          <div class="stat-value" id="statTotal">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Pending</div>
+          <div class="stat-value" id="statPending">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Approved</div>
+          <div class="stat-value" id="statApproved">-</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Rejected</div>
+          <div class="stat-value" id="statRejected">-</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="toolbar">
+          <input class="input" id="searchInput" placeholder="Anahtar kelime ara: ad, e-posta, &#351;ehir, telefon, teknoloji..." />
+          <button class="btn-primary" id="refreshBtn" type="button">Yenile</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ad Soyad</th>
+                <th>Email</th>
+                <th>&#350;ehir</th>
+                <th>LinkedIn</th>
+                <th>WhatsApp No</th>
+                <th>Durum</th>
+                <th>Tarih</th>
+                <th>Aksiyon</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <tr><td class="empty" colspan="8">Y&#252;kleniyor...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <h2 class="modal-title">&#220;ye D&#252;zenle</h2>
+      <form id="editForm">
+        <div class="question-stack" id="editQuestionStack"></div>
+      </form>
+
+      <div class="status" id="editStatus"></div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" type="button" id="closeEditBtn">Kapat</button>
+        <button class="btn-primary" type="button" id="saveEditBtn">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_KEY_STORAGE = 'devuser_admin_key_v1';
+    const ADMIN_EMAIL_STORAGE = 'devuser_admin_email_v1';
+    const LIST_API_URL = '/api/devuser-admin-list';
+    const UPDATE_API_URL = '/api/devuser-admin-update';
+
+    const loginCard = document.getElementById('loginCard');
+    const panel = document.getElementById('panel');
+    const loginStatus = document.getElementById('loginStatus');
+    const adminEmailInput = document.getElementById('adminEmailInput');
+    const adminKeyInput = document.getElementById('adminKeyInput');
+    const userTableBody = document.getElementById('userTableBody');
+    const searchInput = document.getElementById('searchInput');
+
+    const editModal = document.getElementById('editModal');
+    const editForm = document.getElementById('editForm');
+    const editQuestionStack = document.getElementById('editQuestionStack');
+    const editStatus = document.getElementById('editStatus');
+
+    let adminKey = '';
+    let adminEmail = '';
+    let users = [];
+    let filteredUsers = [];
+    let selectedUser = null;
+
+    const YES_NO_OPTIONS = [
+      { value: 'true', label: 'Evet' },
+      { value: 'false', label: 'Hay\u0131r' },
+    ];
+
+    const EDIT_SCHEMA = [
+      { type: 'section', title: 'Temel Bilgiler' },
+      { type: 'text', name: 'ad_soyad', label: 'Ad Soyad', placeholder: 'Ad ve soyad' },
+      { type: 'text', name: 'login_email', label: 'Login Email', placeholder: 'ornek@email.com' },
+      { type: 'text', name: 'sehir', label: '\u015eehir', placeholder: 'Berlin, M\u00fcnih...' },
+      { type: 'radio', name: 'rol', label: 'Rol', dataKind: 'text', options: ['Software Developer', 'QA / Test', 'DevOps', 'Data / AI', 'Product / Project', 'UI/UX', 'Öğrenci', 'Diğer'] },
+      { type: 'radio', name: 'deneyim_seviye', label: 'Deneyim', dataKind: 'text', options: [{ value: '0-1 yil', label: '0-1 y\u0131l' }, { value: '1-3 yil', label: '1-3 y\u0131l' }, { value: '3-5 yil', label: '3-5 y\u0131l' }, { value: '5-10 yil', label: '5-10 y\u0131l' }, { value: '10+ yil', label: '10+ y\u0131l' }] },
+      { type: 'radio', name: 'approval_status', label: 'Onay Durumu', dataKind: 'text', options: ['pending', 'approved', 'rejected'] },
+
+      { type: 'section', title: '\u0130leti\u015fim ve Durum' },
+      { type: 'text', name: 'linkedin_url', label: 'LinkedIn', placeholder: 'https://linkedin.com/in/...' },
+      { type: 'text', name: 'whatsapp_tel', label: 'WhatsApp', placeholder: '+49 ...' },
+      { type: 'text', name: 'proje_link', label: 'Proje Linki', placeholder: 'https://...' },
+      { type: 'radio', name: 'is_arama_durumu', label: '\u0130\u015f Arama Durumu', dataKind: 'text', options: [{ value: 'Hayir', label: 'Hay\u0131r' }, { value: 'Evet, pasif (firsat olursa)', label: 'Evet, pasif (f\u0131rsat olursa)' }, { value: 'Evet, aktif', label: 'Evet, aktif' }, { value: 'Sadece freelance bakiyorum', label: 'Sadece freelance bak\u0131yorum' }] },
+      { type: 'radio', name: 'freelance_aciklik', label: 'Freelance A\u00e7\u0131kl\u0131\u011f\u0131', dataKind: 'text', options: [{ value: 'Hayir', label: 'Hay\u0131r' }, { value: 'Evet, hafta ici aksamlari', label: 'Evet, hafta i\u00e7i ak\u015famlar\u0131' }, { value: 'Evet, hafta sonu', label: 'Evet, hafta sonu' }, { value: 'Evet, part-time duzenli', label: 'Evet, part-time d\u00fczenli' }, { value: 'Evet, full-time freelance', label: 'Evet, full-time freelance' }] },
+
+      { type: 'section', title: 'Bayraklar ve Onaylar' },
+      { type: 'radio', name: 'aratilabilir', label: 'Arat\u0131labilir', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'iletisim_izni', label: '\u0130leti\u015fim \u0130zni', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'veri_paylasim_onay', label: 'Veri Payla\u015f\u0131m Onay\u0131', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'almanya_yasam', label: 'Almanya Ya\u015fam', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'aktif_kod', label: 'Aktif Kod', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'acik_kaynak', label: 'A\u00e7\u0131k Kaynak', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'kendi_proje', label: 'Kendi Proje', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'gonullu_proje', label: 'G\u00f6n\u00fcll\u00fc Proje', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'profesyonel_destek_verebilir', label: 'Profesyonel Destek Verebilir', dataKind: 'bool', options: YES_NO_OPTIONS },
+      { type: 'radio', name: 'profesyonel_destek_almak', label: 'Profesyonel Destek Almak', dataKind: 'bool', options: YES_NO_OPTIONS },
+
+      { type: 'section', title: 'Teknik ve \u0130lgi Alanlar\u0131' },
+      { type: 'checkbox', name: 'guclu_alanlar', label: 'G\u00fc\u00e7l\u00fc Alanlar', dataKind: 'array', columns: 3, options: ['Backend', 'Frontend', 'Mobile', 'QA / Manual Testing', 'Test Automation', 'DevOps / CI-CD', 'Data / BI', 'AI / ML', 'Cloud', 'Security', 'Product / Project', 'UI/UX'] },
+      { type: 'checkbox', name: 'programlama_dilleri', label: 'Programlama Dilleri', dataKind: 'array', columns: 3, options: ['JavaScript', 'TypeScript', 'Python', 'Java', 'C#', 'Go', 'PHP', 'C/C++', 'Kotlin', 'Swift', 'SQL', 'Diğer'] },
+      { type: 'checkbox', name: 'framework_platformlar', label: 'Framework / Platformlar', dataKind: 'array', columns: 3, options: ['React', 'Angular', 'Vue', 'Node.js', '.NET', 'Spring', 'Django', 'FastAPI', 'Flutter', 'React Native'] },
+      { type: 'checkbox', name: 'devops_cloud', label: 'DevOps / Cloud', dataKind: 'array', columns: 3, options: ['Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP', 'Terraform', 'GitHub Actions', 'GitLab CI', 'Jenkins', 'Diğer'] },
+      { type: 'checkbox', name: 'ilgi_konular', label: '\u0130lgi Konular\u0131', dataKind: 'array', columns: 2, options: ['AI araçları / LLM uygulamaları', 'Startup / ürün geliştirme', 'Freelance / danışmanlık', 'Remote çalışma', "Almanya'da kariyer & iş piyasası", 'Networking / event / meetup', 'Side project / hackathon', 'Open-source', 'Sertifika / eğitim', 'Teknik yazı / içerik üretimi'] },
+      { type: 'checkbox', name: 'ogrenmek_istenen', label: '\u00d6\u011frenmek \u0130stenen', dataKind: 'array', columns: 3, options: ['Backend', 'Frontend', 'Mobile', 'Test Automation', 'DevOps', 'Cloud', 'AI / ML', 'System Design / Architecture', 'UI/UX', 'Interview prep / CV', 'Almanya kariyer / iş arama', 'Diğer'] },
+      { type: 'checkbox', name: 'ai_app_builders', label: 'AI App Builders', dataKind: 'array', columns: 3, options: ['Manus', 'Lovable', 'Bolt.new', 'Vercel v0', 'Replit AI Apps', 'Glide AI', 'Softr AI', 'Bubble AI', 'Builder.ai', 'Draftbit AI', 'FlutterFlow AI', 'Kullanmıyorum'] },
+      { type: 'checkbox', name: 'katilma_amaci', label: 'Kat\u0131lma Amac\u0131', dataKind: 'katilma', columns: 2, options: ['Networking', 'İş bulmak', 'İş arkadaşı bulmak', 'Proje geliştirmek', 'Bilgi paylaşmak', 'Mentorluk almak', 'Mentorluk vermek'] },
+      { type: 'checkbox', name: 'isbirligi_turu', label: '\u0130\u015fbirli\u011fi T\u00fcr\u00fc', dataKind: 'array', columns: 2, options: ['Side project (haftada 2–5 saat)', 'Side project (haftada 5–10 saat)', 'Startup kurmak (ciddi)', 'MVP çıkarma ekibi (tasarım+dev+test)', 'Freelance ekip kurmak (ücretli)', 'Açık kaynak proje', 'Study group (system design, leetcode vb.)', 'Mentorluk / koçluk', 'Sadece tanışma & network'] },
+      { type: 'checkbox', name: 'kullanilan_ide', label: 'Kullan\u0131lan IDE', dataKind: 'array', columns: 3, options: ['VS Code', 'IntelliJ IDEA', 'PyCharm', 'WebStorm', 'Visual Studio', 'Eclipse', 'Xcode', 'Android Studio', 'Sublime Text', 'Vim / Neovim'] },
+      { type: 'checkbox', name: 'kullanilan_agent', label: 'Kullan\u0131lan Agent', dataKind: 'array', columns: 3, options: ['GitHub Copilot', 'ChatGPT', 'Claude', 'Cursor', 'Windsurf', 'Manus', 'Tabnine', 'Codeium', 'Amazon Q', 'Kullanmıyorum'] },
+
+      { type: 'section', title: 'Notlar' },
+      { type: 'textarea', name: 'ek_notlar', label: 'Ek Notlar', dataKind: 'text', placeholder: 'Kullan\u0131c\u0131n\u0131n notu' },
+      { type: 'textarea', name: 'admin_note', label: 'Admin Notu', dataKind: 'text', placeholder: 'Admin i\u00e7 notu' },
+    ];
+
+    function setStatus(message, type = '') {
+      loginStatus.textContent = message;
+      loginStatus.className = `status ${type}`.trim();
+    }
+
+    function setEditStatus(message, type = '') {
+      editStatus.textContent = message;
+      editStatus.className = `status ${type}`.trim();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = typeof text === 'string' ? text : String(text ?? '');
+      return div.innerHTML;
+    }
+
+    function normalizeWhatsAppNumber(value) {
+      const raw = String(value || '').trim();
+      if (!raw) return '';
+
+      let digits = raw.replace(/\s+/g, '').replace(/[^\d+]/g, '');
+      if (digits.startsWith('+')) digits = digits.slice(1);
+      digits = digits.replace(/\D/g, '');
+      if (digits.startsWith('00')) digits = digits.slice(2);
+      if (digits.length < 8) return '';
+
+      return digits;
+    }
+
+    function renderWhatsAppCell(value) {
+      const text = String(value || '').trim();
+      if (!text) return '-';
+
+      const normalized = normalizeWhatsAppNumber(text);
+      if (!normalized) return escapeHtml(text);
+
+      const formatted = `+${normalized}`;
+      const safeText = escapeHtml(formatted);
+      return `<a class="wa-link" href="https://wa.me/${normalized}" target="_blank" rel="noopener noreferrer">${safeText}</a>`;
+    }
+
+    function renderLinkedInCell(value) {
+      const text = String(value || '').trim();
+      if (!text) return '-';
+
+      const href = /^https?:\/\//i.test(text) ? text : `https://${text}`;
+      const safeHref = escapeHtml(href);
+      return `<a class="linkedin-link" href="${safeHref}" target="_blank" rel="noopener noreferrer">Profil</a>`;
+    }
+
+    function statusBadge(status) {
+      const safe = String(status || 'pending').toLowerCase();
+      return `<span class="badge ${safe}">${escapeHtml(safe)}</span>`;
+    }
+
+    function normalizeSearch(value) {
+      return String(value || '').toLowerCase().trim();
+    }
+
+    function toOptionMeta(option) {
+      if (typeof option === 'string') {
+        return { value: option, label: option };
+      }
+      return {
+        value: String(option?.value ?? ''),
+        label: String(option?.label ?? option?.value ?? ''),
+      };
+    }
+
+    function renderEditFormQuestions() {
+      editQuestionStack.innerHTML = EDIT_SCHEMA.map((field, fieldIndex) => {
+        if (field.type === 'section') {
+          return `<div class="question-section">${escapeHtml(field.title)}</div>`;
+        }
+
+        const kind = field.dataKind || 'text';
+
+        if (field.type === 'text') {
+          return `
+            <div class="question-card">
+              <label class="question-title" for="edit-${escapeHtml(field.name)}">${escapeHtml(field.label)}</label>
+              <input id="edit-${escapeHtml(field.name)}" class="input" name="${escapeHtml(field.name)}" data-kind="${escapeHtml(kind)}" placeholder="${escapeHtml(field.placeholder || '')}" />
+            </div>
+          `;
+        }
+
+        if (field.type === 'textarea') {
+          return `
+            <div class="question-card">
+              <label class="question-title" for="edit-${escapeHtml(field.name)}">${escapeHtml(field.label)}</label>
+              <textarea id="edit-${escapeHtml(field.name)}" class="textarea" name="${escapeHtml(field.name)}" data-kind="${escapeHtml(kind)}" placeholder="${escapeHtml(field.placeholder || '')}"></textarea>
+            </div>
+          `;
+        }
+
+        const inputType = field.type === 'radio' ? 'radio' : 'checkbox';
+        const optionsClass = field.columns === 3 ? 'option-grid option-grid-3' : 'option-grid';
+        const optionsHtml = (field.options || []).map((option, optionIndex) => {
+          const meta = toOptionMeta(option);
+          const inputId = `edit-${field.name}-${fieldIndex}-${optionIndex}`;
+          return `
+            <label class="option-label" for="${escapeHtml(inputId)}">
+              <input id="${escapeHtml(inputId)}" type="${inputType}" name="${escapeHtml(field.name)}" value="${escapeHtml(meta.value)}" data-kind="${escapeHtml(kind)}" />
+              <span>${escapeHtml(meta.label)}</span>
+            </label>
+          `;
+        }).join('');
+
+        return `
+          <div class="question-card">
+            <div class="question-title">${escapeHtml(field.label)}</div>
+            <div class="${optionsClass}">
+              ${optionsHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function listFromValue(value) {
+      if (Array.isArray(value)) {
+        return value
+          .map((item) => String(item || '').trim())
+          .filter(Boolean);
+      }
+      if (typeof value === 'string') {
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+      return [];
+    }
+
+    function toLocalDate(value) {
+      if (!value) return '-';
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return '-';
+      return d.toLocaleString('tr-TR');
+    }
+
+    function apiHeaders() {
+      const headers = {
+        'Content-Type': 'application/json',
+        'x-admin-key': adminKey,
+      };
+      if (adminEmail) {
+        headers['x-admin-email'] = adminEmail;
+      }
+      return headers;
+    }
+
+    async function apiGet(url) {
+      const headers = { 'x-admin-key': adminKey };
+      if (adminEmail) {
+        headers['x-admin-email'] = adminEmail;
+      }
+
+      const res = await fetch(url, { method: 'GET', headers });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || `HTTP ${res.status}`);
+      }
+      return payload;
+    }
+
+    async function apiPost(url, body) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: apiHeaders(),
+        body: JSON.stringify(body),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || `HTTP ${res.status}`);
+      }
+      return payload;
+    }
+
+    async function login() {
+      const email = adminEmailInput.value.trim().toLowerCase();
+      const key = adminKeyInput.value.trim();
+      if (!key) {
+        setStatus('Sifre/Admin key girin.', 'error');
+        return;
+      }
+
+      adminEmail = email;
+      adminKey = key;
+      setStatus('Ba\u011flant\u0131 kontrol ediliyor...');
+
+      try {
+        await apiGet(`${LIST_API_URL}?limit=1`);
+        sessionStorage.setItem(ADMIN_KEY_STORAGE, adminKey);
+        sessionStorage.setItem(ADMIN_EMAIL_STORAGE, adminEmail);
+        loginCard.style.display = 'none';
+        panel.style.display = 'block';
+        setStatus('');
+        await refreshAll();
+      } catch (error) {
+        setStatus(error.message || 'Giri\u015f ba\u015far\u0131s\u0131z.', 'error');
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem(ADMIN_KEY_STORAGE);
+      sessionStorage.removeItem(ADMIN_EMAIL_STORAGE);
+      adminKey = '';
+      adminEmail = '';
+      users = [];
+      filteredUsers = [];
+      panel.style.display = 'none';
+      loginCard.style.display = 'block';
+      adminEmailInput.value = '';
+      adminKeyInput.value = '';
+      userTableBody.innerHTML = '<tr><td class="empty" colspan="8">Y&#252;kleniyor...</td></tr>';
+      setStatus('\u00c7\u0131k\u0131\u015f yap\u0131ld\u0131.');
+    }
+
+    async function loadStats() {
+      const payload = await apiGet(`${LIST_API_URL}?status=all&limit=1000`);
+      const rows = Array.isArray(payload.data) ? payload.data : [];
+      const stats = { total: rows.length, pending: 0, approved: 0, rejected: 0 };
+
+      for (const row of rows) {
+        const s = String(row.approval_status || 'pending').toLowerCase();
+        if (s === 'approved') stats.approved += 1;
+        else if (s === 'rejected') stats.rejected += 1;
+        else stats.pending += 1;
+      }
+
+      document.getElementById('statTotal').textContent = String(stats.total);
+      document.getElementById('statPending').textContent = String(stats.pending);
+      document.getElementById('statApproved').textContent = String(stats.approved);
+      document.getElementById('statRejected').textContent = String(stats.rejected);
+    }
+
+    async function loadUsers() {
+      userTableBody.innerHTML = '<tr><td class="empty" colspan="8">Y&#252;kleniyor...</td></tr>';
+      const payload = await apiGet(`${LIST_API_URL}?status=all&limit=1000`);
+      users = Array.isArray(payload.data) ? payload.data : [];
+      applyClientFilter();
+    }
+
+    function applyClientFilter() {
+      const q = normalizeSearch(searchInput.value);
+      if (!q) {
+        filteredUsers = [...users];
+      } else {
+        const tokens = q.split(/\s+/).map((item) => item.trim()).filter(Boolean);
+        filteredUsers = users.filter((user) => {
+          const listToText = (value) => Array.isArray(value) ? value.join(' ') : String(value || '');
+          const haystack = [
+            user.ad_soyad,
+            user.login_email,
+            user.sehir,
+            user.linkedin_url,
+            user.whatsapp_tel,
+            user.approval_status,
+            user.deneyim_seviye,
+            user.is_arama_durumu,
+            user.freelance_aciklik,
+            listToText(user.guclu_alanlar),
+            listToText(user.programlama_dilleri),
+            listToText(user.framework_platformlar),
+            listToText(user.devops_cloud),
+            listToText(user.ilgi_konular),
+            listToText(user.kullanilan_ide),
+            listToText(user.kullanilan_agent),
+          ].join(' ').toLowerCase();
+          return tokens.every((token) => haystack.includes(token));
+        });
+      }
+
+      renderTable();
+    }
+
+    function renderTable() {
+      if (!filteredUsers.length) {
+        userTableBody.innerHTML = '<tr><td class="empty" colspan="8">Kay&#305;t bulunamad&#305;.</td></tr>';
+        return;
+      }
+
+      userTableBody.innerHTML = filteredUsers.map((user) => {
+        const id = escapeHtml(user.id);
+        const approved = String(user.approval_status || 'pending').toLowerCase() === 'approved';
+        const rejected = String(user.approval_status || 'pending').toLowerCase() === 'rejected';
+
+        return `
+          <tr>
+            <td>${escapeHtml(user.ad_soyad || '-')}</td>
+            <td>${escapeHtml(user.login_email || '-')}</td>
+            <td>${escapeHtml(user.sehir || '-')}</td>
+            <td>${renderLinkedInCell(user.linkedin_url)}</td>
+            <td>${renderWhatsAppCell(user.whatsapp_tel)}</td>
+            <td>${statusBadge(user.approval_status)}</td>
+            <td>${escapeHtml(toLocalDate(user.created_at))}</td>
+            <td>
+              <div class="actions">
+                <button type="button" class="btn-primary" data-action="approve" data-id="${id}" ${approved ? 'disabled' : ''}>Onayla</button>
+                <button type="button" class="btn-secondary" data-action="reject" data-id="${id}" ${rejected ? 'disabled' : ''}>Reddet</button>
+                <button type="button" class="btn-secondary" data-action="edit" data-id="${id}">D\u00fczenle</button>
+                <button type="button" class="btn-danger" data-action="delete" data-id="${id}">Sil</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function fillEditForm(user) {
+      selectedUser = user;
+      const names = [...new Set(Array.from(editForm.querySelectorAll('[name]')).map((field) => field.name))];
+
+      names.forEach((name) => {
+        const fields = Array.from(editForm.querySelectorAll(`[name="${name}"]`));
+        if (!fields.length) return;
+
+        const first = fields[0];
+        const value = user[name];
+
+        if (first.type === 'radio') {
+          let normalized = '';
+          if (typeof value === 'boolean') normalized = value ? 'true' : 'false';
+          else if (value !== null && value !== undefined) normalized = String(value);
+
+          fields.forEach((field) => {
+            field.checked = String(field.value) === normalized;
+          });
+          return;
+        }
+
+        if (first.type === 'checkbox') {
+          const values = new Set(listFromValue(value));
+          fields.forEach((field) => {
+            field.checked = values.has(String(field.value));
+          });
+          return;
+        }
+
+        first.value = value ?? '';
+      });
+    }
+
+    function openEditModal(user) {
+      fillEditForm(user);
+      setEditStatus('');
+      editModal.classList.add('open');
+    }
+
+    function closeEditModal() {
+      selectedUser = null;
+      editModal.classList.remove('open');
+    }
+
+    function collectEditData() {
+      const data = {};
+      const names = [...new Set(Array.from(editForm.querySelectorAll('[name]')).map((field) => field.name))];
+
+      names.forEach((name) => {
+        const fields = Array.from(editForm.querySelectorAll(`[name="${name}"]`));
+        if (!fields.length) return;
+
+        const first = fields[0];
+        const kind = first.dataset.kind || 'text';
+
+        if (first.type === 'radio') {
+          const checked = fields.find((field) => field.checked);
+          if (!checked) return;
+          data[name] = kind === 'bool' ? checked.value === 'true' : checked.value;
+          return;
+        }
+
+        if (first.type === 'checkbox') {
+          const values = fields
+            .filter((field) => field.checked)
+            .map((field) => String(field.value).trim())
+            .filter(Boolean);
+
+          if (kind === 'katilma') {
+            data[name] = values.join(', ');
+            return;
+          }
+
+          data[name] = values;
+          return;
+        }
+
+        const raw = String(first.value ?? '').trim();
+        if (kind === 'bool') {
+          if (raw === '') return;
+          data[name] = raw === 'true';
+          return;
+        }
+
+        data[name] = raw;
+      });
+
+      return data;
+    }
+
+    async function saveEdit() {
+      if (!selectedUser?.id) return;
+      setEditStatus('Kaydediliyor...');
+
+      try {
+        const data = collectEditData();
+        const payload = await apiPost(UPDATE_API_URL, { id: selectedUser.id, data });
+        if (payload.warning) {
+          setEditStatus(payload.warning, 'error');
+        } else {
+          setEditStatus('Kaydedildi.', 'success');
+        }
+        await refreshAll();
+        closeEditModal();
+      } catch (error) {
+        setEditStatus(error.message || 'Kay\u0131t g\u00fcncellenemedi.', 'error');
+      }
+    }
+
+    async function runAction(action, id) {
+      if (!id) return;
+
+      if (action === 'delete') {
+        if (!window.confirm('Bu kay\u0131t silinsin mi?')) return;
+      }
+
+      try {
+        const payload = await apiPost(UPDATE_API_URL, { id, action });
+        if (payload.warning) {
+          window.alert(payload.warning);
+        }
+        await refreshAll();
+      } catch (error) {
+        window.alert(error.message || '\u0130\u015flem ba\u015far\u0131s\u0131z.');
+      }
+    }
+
+    function findUserById(id) {
+      return users.find((user) => user.id === id) || null;
+    }
+
+    async function refreshAll() {
+      try {
+        await Promise.all([loadStats(), loadUsers()]);
+      } catch (error) {
+        userTableBody.innerHTML = `<tr><td class="empty" colspan="8">${escapeHtml(error.message || 'Y\u00fckleme hatas\u0131')}</td></tr>`;
+      }
+    }
+
+    renderEditFormQuestions();
+
+    document.getElementById('loginBtn').addEventListener('click', login);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    document.getElementById('refreshBtn').addEventListener('click', refreshAll);
+    document.getElementById('saveEditBtn').addEventListener('click', saveEdit);
+    document.getElementById('closeEditBtn').addEventListener('click', closeEditModal);
+
+    searchInput.addEventListener('input', applyClientFilter);
+
+    adminKeyInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        login();
+      }
+    });
+
+    userTableBody.addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+
+      const action = button.dataset.action;
+      const id = button.dataset.id;
+
+      if (action === 'edit') {
+        const user = findUserById(id);
+        if (!user) return;
+        openEditModal(user);
+        return;
+      }
+
+      runAction(action, id);
+    });
+
+    editModal.addEventListener('click', (event) => {
+      if (event.target === editModal) {
+        closeEditModal();
+      }
+    });
+
+    (function init() {
+      const saved = sessionStorage.getItem(ADMIN_KEY_STORAGE);
+      if (!saved) return;
+      adminEmail = sessionStorage.getItem(ADMIN_EMAIL_STORAGE) || '';
+      adminKey = saved;
+      adminEmailInput.value = adminEmail;
+      loginCard.style.display = 'none';
+      panel.style.display = 'block';
+      refreshAll().catch(() => {
+        logout();
+      });
+    })();
+  </script>
+</body>
+
+</html>
+

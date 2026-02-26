@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../img/icons/headericon.png" />
+  <title>Haftalık Özet - almanya101</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="../devuser/devuser.css" />
+  <style>
+    body {
+      overflow-y: auto;
+      padding: 12px 0;
+    }
+
+    .container1 {
+      height: auto;
+      min-height: calc(100dvh - 24px);
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+      gap: 10px;
+    }
+
+    .container1>.card:last-child {
+      min-height: 0;
+      display: block;
+    }
+
+    .card p {
+      margin: 0;
+      color: #cfcfcf;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .summary-accordion {
+      background: #1a1a2e;
+      border: 1px solid #2d2d2d;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .summary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 15px;
+      cursor: pointer;
+      background: #1a1a2e;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.2s ease;
+    }
+
+    .summary-header:hover {
+      background: #222244;
+    }
+
+    .summary-header-content {
+      flex: 1;
+    }
+
+    .summary-title {
+      margin: 0 0 8px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .summary-date {
+      color: #89dcff;
+      font-size: 13px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .summary-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #89dcff;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .summary-accordion.open .summary-icon {
+      transform: rotate(180deg);
+    }
+
+    .summary-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .summary-accordion.open .summary-content {
+      max-height: 2000px;
+    }
+
+    .summary-body {
+      padding: 15px;
+      border-top: 1px solid #2f2f2f;
+      color: #d0d0d0;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .summary-body p {
+      margin: 0 0 8px;
+    }
+
+    .summary-body p:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container1">
+    <div class="card hero-card1">
+      <div class="hero-domain1">almanya101.de</div>
+      <h3 style="margin-bottom: 8px;">Haftalık Özet</h3>
+      <p style="color: rgba(255,255,255,.95);">
+        Her hafta grubumuzda konuşulan tüm konuların madde başlıkları:
+      </p>
+      <p style="color: rgba(255,255,255,.95); margin-top: 6px;">
+        Topluluk tartışmalarını ve paylaşımları buradan takip edebilirsin.
+      </p>
+    </div>
+
+    <div class="card summary-accordion">
+      <button class="summary-header" onclick="toggleSummary()">
+        <div class="summary-header-content">
+          <h5 class="summary-title">CW08-16 Şubat - 22 Şubat</h5>
+        </div>
+        <span class="summary-icon">▼</span>
+      </button>
+      <div class="summary-content">
+        <div class="summary-body">
+          <p>✅ Almanya'da kullanılan yazılım dilleri & tech stack</p>
+          <p>✅ Almanya'ya yüksek lisans ve göç planları</p>
+          <p>✅ "Give to get" prensibi & topluluk kültürü</p>
+          <p>✅ Almanya101 veritabanı & gizlilik</p>
+          <p>✅ Almanya'da iş arama, LinkedIn ve ilan okuma</p>
+          <p>✅ Öğrenci vizesiyle çalışma ve uzaktan iş</p>
+          <p>✅ Türkiye–Almanya evrak ve eşya taşıma</p>
+          <p>✅ Kurumsallarda yapay zekâya geçiş</p>
+          <p>✅ Mercedes-Benz İstanbul ekibinin kapanması</p>
+          <p>✅ Networking, ortak projeler ve etkinlik fikirleri</p>
+          <p>✅ Discord, WhatsApp, YouTube, Reddit yapısı</p>
+          <p>✅ Mobil uygulamalar için tester grubu & MVP araçları</p>
+          <p>✅ Eyalet bazlı alt gruplar & organizasyon</p>
+          <p>✅ Almanya'da çalışma dili: Almanca vs İngilizce</p>
+          <p>✅ Yan projeler, ürün tanıtımı ve görünürlük artırma</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSummary() {
+      const accordion = document.querySelector('.summary-accordion');
+      accordion.classList.toggle('open');
+    }
+  </script>
+</body>
+
+</html>

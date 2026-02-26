@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../img/icons/headericon.png" />
+  <title>Support Each Other - Kayıt - almanya101 | Hepimiz birimiz birimiz hepimiz için!</title>
+  <meta name="title" content="Support Each Other - Kayıt - almanya101 | Hepimiz birimiz birimiz hepimiz için!">
+  <meta name="description"
+    content="Hep destek tam destek! Desteği organik ve sürekli hale getirmek için! Sen de gel!">
+  <meta name="keywords"
+    content="almanya developer, türk developer, almanya tech, software developer almanya, networking, iş birliği">
+  <meta name="author" content="almanya101.de">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="stylesheet" href="add.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+
+</head>
+
+<body>
+  <div class="container1">
+    <!-- Hero Card -->
+    <div class="card hero-card1">
+      <div class="hero-domain1">almanya101.de</div>
+      <h3>Hep destek! Tam destek!</h3>
+      <p class="title">Kayıt</p>
+    </div>
+
+    <!-- Info Card (Collapsible) -->
+    <div class="card info-card">
+      <div class="info-header" onclick="toggleInfo()">
+        <span class="info-title">💡 Neden?</span>
+        <span class="info-toggle" id="infoToggle">▼</span>
+      </div>
+      <div class="info-content" id="infoContent">
+        <p style="margin: 0; line-height: 1.6; color: #000; font-size: 14px;">
+          Yazılım aynı dili konuşan insanların buluştuğu bir yer.<br>
+          Bilgimizi paylaştıkça çoğalırız.<br>
+          Deneyimimizi aktardıkça güçleniriz.<br>
+          Birimizin çözdüğü sorun, diğerimizin yolunu aydınlatır.<br>
+          Burada rekabetten çok dayanışma var.<br>
+          Öğrenmek, üretmek ve birlikte ilerlemek isteyen herkes için burası ortak bir alan.<br>
+          Çünkü yazılım tek başına değil, birlikte anlamlı.
+        </p>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="card">
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Soru 1 / 30</div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card">
+      <form id="devuserForm">
+        
+        <!-- Q1: Ad Soyad -->
+        <div class="step-container active" data-step="1">
+          <div class="question-number">Soru 1 / 30</div>
+          <div class="question-title">Ad Soyad</div>
+          <input type="text" name="ad_soyad" class="form-input" placeholder="Adınız ve soyadınız" required />
+        </div>
+
+        <!-- Q2: LinkedIn -->
+        <div class="step-container" data-step="2">
+          <div class="question-number">Soru 2 / 30</div>
+          <div class="question-title">LinkedIn profil linkiniz</div>
+          <input type="url" name="linkedin_url" class="form-input" placeholder="https://linkedin.com/in/..." />
+        </div>
+
+        <!-- Q3: WhatsApp -->
+        <div class="step-container" data-step="3">
+          <div class="question-number">Soru 3 / 30</div>
+          <div class="question-title">WhatsApp telefon numaranız</div>
+          <input type="tel" name="whatsapp_tel" class="form-input" placeholder="+49 123 456 7890" />
+        </div>
+
+        <!-- Q4: Yaşam yeri -->
+        <div class="step-container" data-step="4">
+          <div class="question-number">Soru 4 / 30</div>
+          <div class="question-title">Şu anda nerede yaşıyorsunuz?</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="yasam_yeri" value="Almanya" required onchange="toggleConditional('yasamYeriDiger', false)" />
+              <span>Almanya</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="yasam_yeri" value="Türkiye" onchange="toggleConditional('yasamYeriDiger', false)" />
+              <span>Türkiye</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="yasam_yeri" value="Diğer" onchange="toggleConditional('yasamYeriDiger', true)" />
+              <span>Diğer</span>
+            </label>
+          </div>
+          <div id="yasamYeriDiger" class="conditional-field">
+            <input type="text" name="yasam_yeri_diger" class="form-input" placeholder="Hangi ülke?" />
+          </div>
+        </div>
+
+        <!-- Q5: Şehir -->
+        <div class="step-container" data-step="5">
+          <div class="question-number">Soru 5 / 30</div>
+          <div class="question-title">Hangi şehirde yaşıyorsun?</div>
+          <input type="text" name="sehir" class="form-input" placeholder="Berlin, München, Hamburg..." required />
+        </div>
+
+        <!-- Q6: Rol -->
+        <div class="step-container" data-step="6">
+          <div class="question-number">Soru 6 / 30</div>
+          <div class="question-title">Rolün nedir?</div>
+          <select name="rol" class="form-select" required>
+            <option value="">Seçiniz...</option>
+            <option value="Software Developer">Software Developer</option>
+            <option value="QA / Test">QA / Test</option>
+            <option value="DevOps">DevOps</option>
+            <option value="Data / AI">Data / AI</option>
+            <option value="Product / Project">Product / Project</option>
+            <option value="UI/UX">UI/UX</option>
+            <option value="Öğrenci">Öğrenci</option>
+            <option value="Diğer">Diğer</option>
+          </select>
+        </div>
+
+        <!-- Q7: Deneyim -->
+        <div class="step-container" data-step="7">
+          <div class="question-number">Soru 7 / 30</div>
+          <div class="question-title">Deneyim seviyeniz?</div>
+          <select name="deneyim_seviye" class="form-select" required>
+            <option value="">Seçiniz...</option>
+            <option value="0–1 yıl">0–1 yıl</option>
+            <option value="1–3 yıl">1–3 yıl</option>
+            <option value="3–5 yıl">3–5 yıl</option>
+            <option value="5–10 yıl">5–10 yıl</option>
+            <option value="10+ yıl">10+ yıl</option>
+          </select>
+        </div>
+
+        <!-- Q8: Aktif kod -->
+        <div class="step-container" data-step="8">
+          <div class="question-number">Soru 8 / 30</div>
+          <div class="question-title">Aktif olarak kod yazıyor musun?</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="aktif_kod" value="true" required />
+              <span>Evet</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="aktif_kod" value="false" />
+              <span>Hayır</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q9: Güçlü alanlar -->
+        <div class="step-container" data-step="9">
+          <div class="question-number">Soru 9 / 30</div>
+          <div class="question-title">En güçlü olduğun alanlar (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="Backend" />
+              <span>Backend</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="Frontend" />
+              <span>Frontend</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="Mobile" />
+              <span>Mobile</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="QA / Manual Testing" />
+              <span>QA / Manual Testing</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="Test Automation" />
+              <span>Test Automation</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="DevOps / CI-CD" />
+              <span>DevOps / CI-CD</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="Data / BI" />
+              <span>Data / BI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="AI / ML" />
+              <span>AI / ML</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="Cloud" />
+              <span>Cloud</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="Security" />
+              <span>Security</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="Product / Project" />
+              <span>Product / Project</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="guclu_alanlar" value="UI/UX" />
+              <span>UI/UX</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q10: Açık kaynak -->
+        <div class="step-container" data-step="10">
+          <div class="question-number">Soru 10 / 30</div>
+          <div class="question-title">Açık kaynak projelere katkı sağlıyor musun?</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="acik_kaynak" value="true" />
+              <span>Evet</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="acik_kaynak" value="false" />
+              <span>Hayır</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q11: Kendi proje -->
+        <div class="step-container" data-step="11">
+          <div class="question-number">Soru 11 / 30</div>
+          <div class="question-title">Kendi projen / girişimin var mı?</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="kendi_proje" value="true" onchange="toggleConditional('projeLink', true)" />
+              <span>Evet</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="kendi_proje" value="false" onchange="toggleConditional('projeLink', false)" />
+              <span>Hayır</span>
+            </label>
+          </div>
+          <div id="projeLink" class="conditional-field">
+            <input type="url" name="proje_link" class="form-input" placeholder="Proje linki (GitHub, website, vb.)" />
+          </div>
+        </div>
+
+        <!-- Q12: Programlama dilleri -->
+        <div class="step-container" data-step="12">
+          <div class="question-number">Soru 12 / 30</div>
+          <div class="question-title">Kullandığın programlama dilleri (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="JavaScript" />
+              <span>JavaScript</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="TypeScript" />
+              <span>TypeScript</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="Python" />
+              <span>Python</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="Java" />
+              <span>Java</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="C#" />
+              <span>C#</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="Go" />
+              <span>Go</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="PHP" />
+              <span>PHP</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="C/C++" />
+              <span>C/C++</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="Kotlin" />
+              <span>Kotlin</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="Swift" />
+              <span>Swift</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="SQL" />
+              <span>SQL</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="programlama_dilleri" value="Diğer" />
+              <span>Diğer</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q13: Framework -->
+        <div class="step-container" data-step="13">
+          <div class="question-number">Soru 13 / 30</div>
+          <div class="question-title">Kullandığın framework / platformlar (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="React" />
+              <span>React</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="Angular" />
+              <span>Angular</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="Vue" />
+              <span>Vue</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="Node.js" />
+              <span>Node.js</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value=".NET" />
+              <span>.NET</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="Spring" />
+              <span>Spring</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="Django" />
+              <span>Django</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="FastAPI" />
+              <span>FastAPI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="Flutter" />
+              <span>Flutter</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="framework_platformlar" value="React Native" />
+              <span>React Native</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q14: DevOps/Cloud -->
+        <div class="step-container" data-step="14">
+          <div class="question-number">Soru 14 / 30</div>
+          <div class="question-title">DevOps / Cloud araçları (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="Docker" />
+              <span>Docker</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="Kubernetes" />
+              <span>Kubernetes</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="AWS" />
+              <span>AWS</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="Azure" />
+              <span>Azure</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="GCP" />
+              <span>GCP</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="Terraform" />
+              <span>Terraform</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="GitHub Actions" />
+              <span>GitHub Actions</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="GitLab CI" />
+              <span>GitLab CI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="Jenkins" />
+              <span>Jenkins</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="devops_cloud" value="Diğer" />
+              <span>Diğer</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q15: İlgi konuları -->
+        <div class="step-container" data-step="15">
+          <div class="question-number">Soru 15 / 30</div>
+          <div class="question-title">Şu anda en çok ilgini çeken konular (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="AI araçları / LLM uygulamaları" />
+              <span>AI araçları / LLM uygulamaları</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Startup / ürün geliştirme" />
+              <span>Startup / ürün geliştirme</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Freelance / danışmanlık" />
+              <span>Freelance / danışmanlık</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Remote çalışma" />
+              <span>Remote çalışma</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Almanya'da kariyer & iş piyasası" />
+              <span>Almanya'da kariyer & iş piyasası</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Networking / event / meetup" />
+              <span>Networking / event / meetup</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Side project / hackathon" />
+              <span>Side project / hackathon</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Open-source" />
+              <span>Open-source</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Sertifika / eğitim" />
+              <span>Sertifika / eğitim</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ilgi_konular" value="Teknik yazı / içerik üretimi" />
+              <span>Teknik yazı / içerik üretimi</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q16: Öğrenmek istenen -->
+        <div class="step-container" data-step="16">
+          <div class="question-number">Soru 16 / 30</div>
+          <div class="question-title">Öğrenmek istediğin alanlar (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Backend" />
+              <span>Backend</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Frontend" />
+              <span>Frontend</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Mobile" />
+              <span>Mobile</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Test Automation" />
+              <span>Test Automation</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="DevOps" />
+              <span>DevOps</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Cloud" />
+              <span>Cloud</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="AI / ML" />
+              <span>AI / ML</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Data Engineering / Analytics" />
+              <span>Data Engineering / Analytics</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Security" />
+              <span>Security</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="System Design / Architecture" />
+              <span>System Design / Architecture</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Performance / Scalability" />
+              <span>Performance / Scalability</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="UI/UX" />
+              <span>UI/UX</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Product / Agile" />
+              <span>Product / Agile</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Interview prep / CV" />
+              <span>Interview prep / CV</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Almanya kariyer / iş arama" />
+              <span>Almanya kariyer / iş arama</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ogrenmek_istenen" value="Diğer" />
+              <span>Diğer</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q17: İş arama -->
+        <div class="step-container" data-step="17">
+          <div class="question-number">Soru 17 / 30</div>
+          <div class="question-title">Aktif olarak iş arıyor musun?</div>
+          <select name="is_arama_durumu" class="form-select" required>
+            <option value="">Seçiniz...</option>
+            <option value="Hayır">Hayır</option>
+            <option value="Evet, pasif (fırsat olursa)">Evet, pasif (fırsat olursa)</option>
+            <option value="Evet, aktif">Evet, aktif</option>
+            <option value="Sadece freelance bakıyorum">Sadece freelance bakıyorum</option>
+          </select>
+        </div>
+
+        <!-- Q18: AI App Builders -->
+        <div class="step-container" data-step="18">
+          <div class="question-number">Soru 18 / 30</div>
+          <div class="question-title">Aşağıdaki AI-driven app builderlardan hangilerini kullanıyorsun? (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Manus" />
+              <span>Manus</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Lovable" />
+              <span>Lovable</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Bolt.new" />
+              <span>Bolt.new</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Vercel v0" />
+              <span>Vercel v0</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Replit AI Apps" />
+              <span>Replit AI Apps</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Glide AI" />
+              <span>Glide AI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Softr AI" />
+              <span>Softr AI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Bubble AI" />
+              <span>Bubble AI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Builder.ai" />
+              <span>Builder.ai</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Draftbit AI" />
+              <span>Draftbit AI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="FlutterFlow AI" />
+              <span>FlutterFlow AI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="ai_app_builders" value="Kullanmıyorum" />
+              <span>Kullanmıyorum</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q19: Freelance -->
+        <div class="step-container" data-step="19">
+          <div class="question-number">Soru 19 / 30</div>
+          <div class="question-title">Freelance işlere açık mısın?</div>
+          <select name="freelance_aciklik" class="form-select" required>
+            <option value="">Seçiniz...</option>
+            <option value="Hayır">Hayır</option>
+            <option value="Evet, hafta içi akşamları">Evet, hafta içi akşamları</option>
+            <option value="Evet, hafta sonu">Evet, hafta sonu</option>
+            <option value="Evet, part-time düzenli">Evet, part-time düzenli</option>
+            <option value="Evet, full-time freelance">Evet, full-time freelance</option>
+          </select>
+        </div>
+
+        <!-- Q19: Gönüllü proje -->
+        <div class="step-container" data-step="19">
+          <div class="question-number">Soru 19 / 30</div>
+          <div class="question-title">Gönüllü projelerde yer almak ister misin?</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="gonullu_proje" value="true" />
+              <span>Evet</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="gonullu_proje" value="false" />
+              <span>Hayır</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q20: Katılma amacı -->
+        <div class="step-container" data-step="20">
+          <div class="question-number">Soru 20 / 30</div>
+          <div class="question-title">Topluluğa katılma amacın</div>
+          <select name="katilma_amaci" class="form-select" required>
+            <option value="">Seçiniz...</option>
+            <option value="Networking">Networking</option>
+            <option value="İş bulmak">İş bulmak</option>
+            <option value="İş arkadaşı bulmak">İş arkadaşı bulmak</option>
+            <option value="Proje geliştirmek">Proje geliştirmek</option>
+            <option value="Bilgi paylaşmak">Bilgi paylaşmak</option>
+            <option value="Mentorluk almak">Mentorluk almak</option>
+            <option value="Mentorluk vermek">Mentorluk vermek</option>
+          </select>
+        </div>
+
+        <!-- Q21: İş birliği türü -->
+        <div class="step-container" data-step="21">
+          <div class="question-number">Soru 21 / 30</div>
+          <div class="question-title">Nasıl iş birliği yapmak istersin? (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="Side project (haftada 2–5 saat)" />
+              <span>Side project (haftada 2–5 saat)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="Side project (haftada 5–10 saat)" />
+              <span>Side project (haftada 5–10 saat)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="Startup kurmak (ciddi)" />
+              <span>Startup kurmak (ciddi)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="MVP çıkarma ekibi (tasarım+dev+test)" />
+              <span>MVP çıkarma ekibi (tasarım+dev+test)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="Freelance ekip kurmak (ücretli)" />
+              <span>Freelance ekip kurmak (ücretli)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="Açık kaynak proje" />
+              <span>Açık kaynak proje</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="Study group (system design, leetcode vb.)" />
+              <span>Study group (system design, leetcode vb.)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="Mentorluk / koçluk" />
+              <span>Mentorluk / koçluk</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isbirligi_turu" value="Sadece tanışma & network" />
+              <span>Sadece tanışma & network</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q22: Profesyonel destek verebilir -->
+        <div class="step-container" data-step="22">
+          <div class="question-number">Soru 22 / 30</div>
+          <div class="question-title">Profesyonel destek verebilir misin? (CV, mülakat, kariyer)</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="profesyonel_destek_verebilir" value="true" />
+              <span>Evet</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="profesyonel_destek_verebilir" value="false" />
+              <span>Hayır</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q23: Profesyonel destek almak -->
+        <div class="step-container" data-step="23">
+          <div class="question-number">Soru 23 / 30</div>
+          <div class="question-title">Profesyonel destek almak ister misin?</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="profesyonel_destek_almak" value="true" />
+              <span>Evet</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="profesyonel_destek_almak" value="false" />
+              <span>Hayır</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q24: Aratılabilir -->
+        <div class="step-container" data-step="24">
+          <div class="question-number">Soru 24 / 30</div>
+          <div class="question-title">Bilgilerin topluluk içinde aratılabilir olsun mu?</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="aratilabilir" value="true" required />
+              <span>Evet, profilim görünsün</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="aratilabilir" value="false" />
+              <span>Hayır, sadece kayıt olmak istiyorum</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q25: İletişim izni -->
+        <div class="step-container" data-step="25">
+          <div class="question-number">Soru 25 / 30</div>
+          <div class="question-title">WhatsApp üzerinden proje/iş teklifleri için iletişime geçilebilir mi?</div>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="iletisim_izni" value="true" required />
+              <span>Evet</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="iletisim_izni" value="false" />
+              <span>Hayır</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q26: IDE'ler -->
+        <div class="step-container" data-step="26">
+          <div class="question-number">Soru 26 / 30</div>
+          <div class="question-title">Kullandığınız IDE'ler (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="VS Code" />
+              <span>VS Code</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="IntelliJ IDEA" />
+              <span>IntelliJ IDEA</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="PyCharm" />
+              <span>PyCharm</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="WebStorm" />
+              <span>WebStorm</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="Visual Studio" />
+              <span>Visual Studio</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="Eclipse" />
+              <span>Eclipse</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="Xcode" />
+              <span>Xcode</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="Android Studio" />
+              <span>Android Studio</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="Sublime Text" />
+              <span>Sublime Text</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_ide" value="Vim / Neovim" />
+              <span>Vim / Neovim</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q27: AI Agent'lar -->
+        <div class="step-container" data-step="27">
+          <div class="question-number">Soru 27 / 30</div>
+          <div class="question-title">Kullandığınız AI Agent'lar (birden fazla seçebilirsin)</div>
+          <div class="checkbox-group checkbox-group-two-col">
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="GitHub Copilot" />
+              <span>GitHub Copilot</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="ChatGPT" />
+              <span>ChatGPT</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="Claude" />
+              <span>Claude</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="Cursor" />
+              <span>Cursor</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="Windsurf" />
+              <span>Windsurf</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="Manus" />
+              <span>Manus</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="Tabnine" />
+              <span>Tabnine</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="Codeium" />
+              <span>Codeium</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="Amazon Q" />
+              <span>Amazon Q</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="kullanilan_agent" value="Kullanmıyorum" />
+              <span>Kullanmıyorum</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q28: Ek notlar -->
+        <div class="step-container" data-step="28">
+          <div class="question-number">Soru 28 / 30</div>
+          <div class="question-title">Eklemek istediğiniz bir şey var mı?</div>
+          <textarea name="ek_notlar" class="form-input" placeholder="Kısa bir not bırakabilirsiniz... (Opsiyonel)" maxlength="500" rows="5" style="resize: vertical; min-height: 120px;"></textarea>
+          <div style="font-size: 12px; color: #999; margin-top: 8px; text-align: right;" id="charCount">0 / 500</div>
+        </div>
+
+        <!-- Q29: Veritabanı paylaşım onayı -->
+        <div class="step-container" data-step="29">
+          <div class="question-number">Soru 29 / 30</div>
+          <div class="question-title">Oluşturulan veritabanı grupla paylaşılacak. Onaylıyor musunuz?</div>
+          <p style="font-size: 13px; color: #999; margin-bottom: 16px; line-height: 1.4;">(Onaylam azsanız listeye erişiminiz ne yazık ki olmayacak.)</p>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="veri_paylasim_onay" value="true" required />
+              <span>Evet, onaylıyorum</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="veri_paylasim_onay" value="false" />
+              <span>Hayır, onaylamıyorum</span>
+            </label>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Navigation Buttons -->
+      <div class="nav-buttons">
+        <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" disabled>
+          ← Geri
+        </button>
+        <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+          İleri →
+        </button>
+        <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitForm()" style="display: none;">
+          Gönder 🚀
+        </button>
+      </div>
+
+      <!-- Success Message -->
+      <div class="success-message" id="successMessage">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Kayıt Başarılı!</div>
+        <div class="success-text">
+          Teşekkürler!
+        </div>
+        <button class="btn btn-primary" onclick="window.location.href='list.html'">
+          Üyeleri Keşfet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Supabase
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+      window.SUPABASE_CONFIG.url,
+      window.SUPABASE_CONFIG.anonKey
+    );
+
+    // Toggle info card
+    function toggleInfo() {
+      const content = document.getElementById('infoContent');
+      const toggle = document.getElementById('infoToggle');
+      content.classList.toggle('open');
+      toggle.classList.toggle('open');
+    }
+
+    // Multi-step form logic - using window scope to prevent variable issues
+    window.currentStep = 1;
+    window.totalSteps = 29;
+
+    function updateProgress() {
+      const progress = (window.currentStep / window.totalSteps) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+      document.getElementById('progressText').textContent = `Soru ${window.currentStep} / ${window.totalSteps}`;
+    }
+
+    function showStep(step) {
+      // Hide all steps
+      document.querySelectorAll('.step-container').forEach(container => {
+        container.classList.remove('active');
+      });
+
+      // Show current step
+      const currentContainer = document.querySelector(`[data-step="${step}"]`);
+      if (currentContainer) {
+        currentContainer.classList.add('active');
+      }
+
+      // Update buttons
+      document.getElementById('prevBtn').disabled = (step === 1);
+      
+      if (step === window.totalSteps) {
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('submitBtn').style.display = 'block';
+      } else {
+        document.getElementById('nextBtn').style.display = 'block';
+        document.getElementById('submitBtn').style.display = 'none';
+      }
+
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateCurrentStep() {
+      const currentContainer = document.querySelector(`[data-step="${window.currentStep}"]`);
+      if (!currentContainer) return true; // Skip validation if container not found
+      const requiredFields = currentContainer.querySelectorAll('[required]');
+      
+      for (let field of requiredFields) {
+        if (field.type === 'radio') {
+          const radioGroup = currentContainer.querySelectorAll(`[name="${field.name}"]`);
+          const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+          if (!isChecked) {
+            alert('Lütfen bir seçenek seçin.');
+            return false;
+          }
+        } else if (!field.value.trim()) {
+          alert('Lütfen bu alanı doldurun.');
+          field.focus();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function changeStep(direction) {
+      if (direction === 1 && !validateCurrentStep()) {
+        return;
+      }
+
+      // Ensure currentStep is a number and update window.currentStep
+      window.currentStep = parseInt(window.currentStep) || 1;
+      window.currentStep += direction;
+      if (window.currentStep < 1) window.currentStep = 1;
+      if (window.currentStep > window.totalSteps) window.currentStep = window.totalSteps;
+      
+      showStep(window.currentStep);
+    }
+
+    function toggleConditional(fieldId, show) {
+      const field = document.getElementById(fieldId);
+      if (field) {
+        if (show) {
+          field.classList.add('active');
+        } else {
+          field.classList.remove('active');
+          const input = field.querySelector('input');
+          if (input) input.value = '';
+        }
+      }
+    }
+
+    async function submitForm() {
+      if (!validateCurrentStep()) {
+        return;
+      }
+
+      const form = document.getElementById('devuserForm');
+      const formData = new FormData(form);
+      
+      // Convert to object
+      const data = {};
+      
+      // Handle single value fields
+      for (let [key, value] of formData.entries()) {
+        if (key === 'almanya_yasam' || key === 'aktif_kod' || key === 'acik_kaynak' || 
+            key === 'kendi_proje' || key === 'gonullu_proje' || key === 'profesyonel_destek_verebilir' || 
+            key === 'profesyonel_destek_almak' || key === 'aratilabilir' || key === 'iletisim_izni') {
+          data[key] = value === 'true';
+        } else if (!data[key]) {
+          data[key] = value;
+        }
+      }
+      
+      // Handle array fields (checkboxes)
+      const arrayFields = ['guclu_alanlar', 'programlama_dilleri', 'framework_platformlar', 
+                           'devops_cloud', 'ilgi_konular', 'ogrenmek_istenen', 'isbirligi_turu',
+                           'kullanilan_ide', 'kullanilan_agent', 'ai_app_builders'];
+      
+      arrayFields.forEach(field => {
+        const values = formData.getAll(field);
+        data[field] = values.length > 0 ? values : [];
+      });
+
+      // Submit to Supabase
+      try {
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitBtn').textContent = 'Gönderiliyor...';
+
+        const { data: result, error } = await supabaseClient
+          .from('supporteachother')
+          .insert([data]);
+
+        if (error) throw error;
+
+        // Show success message
+        document.querySelector('.nav-buttons').style.display = 'none';
+        document.getElementById('devuserForm').style.display = 'none';
+        document.querySelector('.progress-container').parentElement.style.display = 'none';
+        document.getElementById('successMessage').classList.add('active');
+
+      } catch (error) {
+        // Error occurred during submission
+        alert('Bir hata oluştu: ' + error.message);
+        document.getElementById('submitBtn').disabled = false;
+        document.getElementById('submitBtn').textContent = 'Gönder 🚀';
+      }
+    }
+
+    // Initialize
+    showStep(1);
+
+    // Character counter for textarea
+    const ekNotlarTextarea = document.querySelector('textarea[name="ek_notlar"]');
+    if (ekNotlarTextarea) {
+      ekNotlarTextarea.addEventListener('input', function() {
+        const charCount = this.value.length;
+        document.getElementById('charCount').textContent = `${charCount} / 500`;
+      });
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        if (window.currentStep < window.totalSteps) {
+          changeStep(1);
+        } else {
+          submitForm();
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

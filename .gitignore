@@ -1,0 +1,19 @@
+node_modules/
+.next/
+.DS_Store
+.vercel/
+news-import/
+haberler/supabase-config-admin.js
+.env*
+admin/foradmin/
+
+# admin json cache
+foradmin/jason/*.json
+
+.vercel
+.env*.local
+.vercel-dev.log
+.vercel-dev.pid
+.next-dev.log
+.next-dev.pid
+tsconfig.tsbuildinfo

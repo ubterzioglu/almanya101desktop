@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <!-- Mobile Redirect: almanya101.de -> m.almanya101.de -->
+  <script>
+    (function() {
+      if (window.location.hostname === 'm.almanya101.de') return;
+      if (window.location.search.includes('desktop=1')) return;
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile) {
+        var mobileUrl = window.location.href.replace('almanya101.de', 'm.almanya101.de');
+        window.location.replace(mobileUrl);
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../img/icons/headericon.png" />
+  <title>Developer Topluluğu - almanya101</title>
+  <meta name="title" content="Developer Topluluğu - almanya101">
+  <meta name="description"
+    content="Almanya'da yaşayan Türk developer, QA, DevOps ve tech profesyonellerini keşfet.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="stylesheet" href="devuserlist.css" />
+</head>
+
+<body>
+  <!-- Auth Gate -->
+  <div class="container1" id="authGate">
+    <div class="card hero-card1">
+      <div class="hero-domain1">almanya101.de</div>
+      <h3>Giriş Gerekli</h3>
+      <p style="margin: 10px 0 0 0;">Devuser listesini görmek için onaylı hesabınızla giriş yapın.</p>
+    </div>
+
+    <div class="card auth-card">
+      <div class="auth-grid">
+        <input type="email" id="authEmail" placeholder="Email adresiniz" autocomplete="email" />
+        <input type="password" id="authPassword" placeholder="Şifreniz" autocomplete="current-password" />
+      </div>
+
+      <div class="auth-actions">
+        <button class="btn btn-primary" id="emailSignInBtn" type="button">E-posta ile giriş</button>
+      </div>
+
+      <p class="auth-note">Sadece admin onaylı üyeler arama ekranına erişebilir.</p>
+      <p class="auth-status" id="authStatusText"></p>
+      
+      <a href="#" class="password-reset-link" id="forgotPasswordLink">Şifremi unuttum</a>
+    </div>
+  </div>
+
+  <!-- Password Reset Modal -->
+  <div class="modal-overlay hidden" id="passwordResetModal">
+    <div class="modal-content">
+      <h3 class="modal-title">Şifre Sıfırlama</h3>
+      <p class="modal-text">Şifre sıfırlama bağlantısı için e-posta adresinizi girin.</p>
+      <input type="email" id="resetEmail" class="modal-input" placeholder="email@ornek.com" />
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelResetBtn">İptal</button>
+        <button class="btn btn-primary" id="sendResetBtn">Gönder</button>
+      </div>
+      <p class="auth-status" id="resetStatusText" style="margin-top: 12px; text-align: center;"></p>
+    </div>
+  </div>
+
+  <!-- Protected Content -->
+  <div class="container1" id="protectedContent" style="display:none;">
+    <!-- Hero -->
+    <div class="card hero-card1" style="margin-bottom: 24px;">
+      <div class="hero-top1">
+        <div>
+          <div class="hero-domain1">almanya101.de</div>
+          <h3 style="margin: 8px 0 0 0;">Developer Topluluğu</h3>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-secondary" id="editProfileBtn">Profil Düzenle</button>
+          <button type="button" class="btn btn-secondary" id="logoutBtn">Çıkış</button>
+        </div>
+      </div>
+      <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+        <div style="font-size: 13px; opacity: 0.9;">Aktif oturum: <strong id="activeAccountEmail">-</strong></div>
+      </div>
+    </div>
+
+    <!-- Dashboard Stats -->
+    <div class="dashboard-grid" id="dashboard">
+      <div class="dashboard-card primary">
+        <div class="dashboard-icon">👥</div>
+        <div class="dashboard-value" id="statTotalUsers">-</div>
+        <div class="dashboard-label">Toplam Üye</div>
+      </div>
+      <div class="dashboard-card success">
+        <div class="dashboard-icon">🔍</div>
+        <div class="dashboard-value" id="statJobSeekers">-</div>
+        <div class="dashboard-label">İş Arayan</div>
+      </div>
+      <div class="dashboard-card info">
+        <div class="dashboard-icon">💼</div>
+        <div class="dashboard-value" id="statFreelancers">-</div>
+        <div class="dashboard-label">Freelance Açık</div>
+      </div>
+      <div class="dashboard-card warning">
+        <div class="dashboard-icon">🎓</div>
+        <div class="dashboard-value" id="statMentors">-</div>
+        <div class="dashboard-label">Mentor</div>
+      </div>
+    </div>
+
+    <!-- Main Layout: Sidebar + Content -->
+    <div class="main-layout">
+      <!-- Sidebar Filters -->
+      <aside class="sidebar">
+        <button class="sidebar-mobile-toggle" id="mobileFilterToggle">
+          Filtreler ☰
+        </button>
+        
+        <div class="sidebar-content" id="sidebarContent">
+          <div class="card">
+            <h4 class="sidebar-title">Kategoriler</h4>
+            
+            <div class="category-filter-group">
+              <button class="category-btn active" data-category="recent" id="catRecent">
+                <span class="icon">🆕</span>
+                <span>Son Katılanlar</span>
+                <span class="badge" id="countRecent">10</span>
+              </button>
+              <button class="category-btn" data-category="jobseeker" id="catJobSeeker">
+                <span class="icon">🔍</span>
+                <span>İş Arayanlar</span>
+                <span class="badge" id="countJobSeekers">0</span>
+              </button>
+              <button class="category-btn" data-category="employer" id="catEmployer">
+                <span class="icon">🏢</span>
+                <span>İş Verenler</span>
+                <span class="badge" id="countEmployers">0</span>
+              </button>
+              <button class="category-btn" data-category="freelance" id="catFreelance">
+                <span class="icon">💻</span>
+                <span>Freelancerlar</span>
+                <span class="badge" id="countFreelancers">0</span>
+              </button>
+              <button class="category-btn" data-category="mentor" id="catMentor">
+                <span class="icon">🎓</span>
+                <span>Mentorlar</span>
+                <span class="badge" id="countMentors">0</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4 class="sidebar-title">Filtrele</h4>
+            
+            <div class="sidebar-section">
+              <label class="sidebar-label">Anahtar Kelime</label>
+              <div class="search-bar-container" style="margin: 0;">
+                <input type="text" id="keywordSearch" placeholder="Ad, şehir, rol, teknoloji...">
+              </div>
+            </div>
+
+            <div class="sidebar-section">
+              <label class="sidebar-label">Deneyim Seviyesi</label>
+              <div class="checkbox-filter-row" style="flex-direction: column; align-items: stretch;">
+                <label class="checkbox-filter-item">
+                  <input type="checkbox" class="exp-filter-checkbox" value="0-1">
+                  <span>0-1 yıl</span>
+                </label>
+                <label class="checkbox-filter-item">
+                  <input type="checkbox" class="exp-filter-checkbox" value="1-3">
+                  <span>1-3 yıl</span>
+                </label>
+                <label class="checkbox-filter-item">
+                  <input type="checkbox" class="exp-filter-checkbox" value="3-5">
+                  <span>3-5 yıl</span>
+                </label>
+                <label class="checkbox-filter-item">
+                  <input type="checkbox" class="exp-filter-checkbox" value="5-10">
+                  <span>5-10 yıl</span>
+                </label>
+                <label class="checkbox-filter-item">
+                  <input type="checkbox" class="exp-filter-checkbox" value="10+">
+                  <span>10+ yıl</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="sidebar-section">
+              <label class="sidebar-label">Hızlı Filtreler</label>
+              <div class="checkbox-filter-row" style="flex-direction: column; align-items: stretch;">
+                <label class="checkbox-filter-item">
+                  <input type="checkbox" id="filterActiveJob">
+                  <span>🟢 Aktif iş arıyor</span>
+                </label>
+                <label class="checkbox-filter-item">
+                  <input type="checkbox" id="filterFreelance">
+                  <span>💼 Freelance açık</span>
+                </label>
+                <label class="checkbox-filter-item">
+                  <input type="checkbox" id="filterMentor">
+                  <span>🎓 Mentorluk verebilir</span>
+                </label>
+              </div>
+            </div>
+
+            <button class="view-all-btn hidden" id="viewAllBtn">
+              Tüm Üyeleri Göster →
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="content-area">
+        <div class="results-header">
+          <h2 class="results-title" id="resultsTitle">Son Katılan Üyeler</h2>
+          <span class="results-count" id="resultsCount">Yükleniyor...</span>
+        </div>
+
+        <div class="loading" id="loadingState">
+          <div class="loading-spinner"></div>
+          <p>Üyeler yükleniyor...</p>
+        </div>
+
+        <div class="user-grid hidden" id="userGrid"></div>
+
+        <div class="empty-state hidden" id="emptyState">
+          <h4>Sonuç bulunamadı</h4>
+          <p>Filtreleri değiştirerek tekrar deneyin.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script type="module">
+    const USERS_API_URL = '/api/devuser-list';
+
+    // DOM Elements
+    const authGate = document.getElementById('authGate');
+    const protectedContent = document.getElementById('protectedContent');
+    const authStatusText = document.getElementById('authStatusText');
+    const activeAccountEmail = document.getElementById('activeAccountEmail');
+
+    const emailInput = document.getElementById('authEmail');
+    const passwordInput = document.getElementById('authPassword');
+
+    const emailSignInBtn = document.getElementById('emailSignInBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+
+    // Modal elements
+    const passwordResetModal = document.getElementById('passwordResetModal');
+    const resetEmail = document.getElementById('resetEmail');
+    const sendResetBtn = document.getElementById('sendResetBtn');
+    const cancelResetBtn = document.getElementById('cancelResetBtn');
+    const resetStatusText = document.getElementById('resetStatusText');
+
+    // Filter elements
+    const keywordSearchInput = document.getElementById('keywordSearch');
+    const filterActiveJobInput = document.getElementById('filterActiveJob');
+    const filterFreelanceInput = document.getElementById('filterFreelance');
+    const filterMentorInput = document.getElementById('filterMentor');
+    const expFilterInputs = Array.from(document.querySelectorAll('.exp-filter-checkbox'));
+    const categoryBtns = Array.from(document.querySelectorAll('.category-btn'));
+    const viewAllBtn = document.getElementById('viewAllBtn');
+    const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+    const sidebarContent = document.getElementById('sidebarContent');
+    const resultsTitle = document.getElementById('resultsTitle');
+
+    // State
+    let supabaseClient = null;
+    let allUsers = [];
+    let filteredUsers = [];
+    let usersLoaded = false;
+    let activeSessionUserId = '';
+    let currentCategory = 'recent';
+    let showingAll = false;
+    const REQUEST_TIMEOUT_MS = 12000;
+
+    // Stats elements
+    const statTotalUsers = document.getElementById('statTotalUsers');
+    const statJobSeekers = document.getElementById('statJobSeekers');
+    const statFreelancers = document.getElementById('statFreelancers');
+    const statMentors = document.getElementById('statMentors');
+    const countJobSeekers = document.getElementById('countJobSeekers');
+    const countEmployers = document.getElementById('countEmployers');
+    const countFreelancers = document.getElementById('countFreelancers');
+    const countMentors = document.getElementById('countMentors');
+
+    function setAuthStatus(message, type = '') {
+      authStatusText.textContent = message;
+      authStatusText.className = `auth-status ${type}`.trim();
+    }
+
+    function getSupabaseClient() {
+      if (supabaseClient) return supabaseClient;
+
+      const cfg = window.ALMANYA101_SUPABASE || {};
+      if (!window.supabase || !cfg.url || !cfg.anonKey) {
+        throw new Error('Supabase config eksik.');
+      }
+
+      supabaseClient = window.supabase.createClient(cfg.url, cfg.anonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+        },
+      });
+      return supabaseClient;
+    }
+
+    function showProtected(session) {
+      authGate.style.display = 'none';
+      protectedContent.style.display = 'block';
+      activeAccountEmail.textContent = session?.user?.email || '-';
+    }
+
+    function showAuthGate() {
+      usersLoaded = false;
+      allUsers = [];
+      filteredUsers = [];
+      activeSessionUserId = '';
+      activeAccountEmail.textContent = '-';
+      protectedContent.style.display = 'none';
+      authGate.style.display = 'block';
+    }
+
+    async function getSessionToken() {
+      const client = getSupabaseClient();
+      const { data, error } = await client.auth.getSession();
+      if (error || !data.session) return null;
+      return data.session.access_token;
+    }
+
+    function withTimeout(promise, timeoutMs = REQUEST_TIMEOUT_MS, timeoutMessage = 'İstek zaman aşımına uğradı.') {
+      let timerId = null;
+      const timeoutPromise = new Promise((_, reject) => {
+        timerId = window.setTimeout(() => {
+          reject(new Error(timeoutMessage));
+        }, timeoutMs);
+      });
+      return Promise.race([promise, timeoutPromise]).finally(() => {
+        if (timerId) window.clearTimeout(timerId);
+      });
+    }
+
+    async function fetchUsersWithToken(token) {
+      const response = await withTimeout(
+        fetch(USERS_API_URL, {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        REQUEST_TIMEOUT_MS,
+        'Kullanıcı listesi zaman aşımına uğradı.'
+      );
+
+      if (response.status === 401) {
+        return { ok: false, unauthorized: true, data: null };
+      }
+      if (response.status === 403) {
+        const payload = await response.json().catch(() => ({}));
+        return { ok: false, unauthorized: false, forbidden: true, payload, data: null };
+      }
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.error || `HTTP ${response.status}`);
+      }
+      return { ok: true, unauthorized: false, data: payload.data || [] };
+    }
+
+    async function loadUsers() {
+      const loadingState = document.getElementById('loadingState');
+      const userGrid = document.getElementById('userGrid');
+      
+      usersLoaded = false;
+      loadingState.classList.remove('hidden');
+      userGrid.classList.add('hidden');
+
+      try {
+        const token = await getSessionToken();
+        if (!token) {
+          showAuthGate();
+          return { ok: false, reason: 'auth' };
+        }
+
+        let result = await fetchUsersWithToken(token);
+        if (result.forbidden) {
+          await signOutSilently();
+          setAuthStatus(result.payload?.error || 'Kaydınız admin onayı bekliyor.', 'error');
+          return { ok: false, reason: 'auth' };
+        }
+
+        if (result.unauthorized) {
+          const refreshedToken = await getSessionToken();
+          if (!refreshedToken) {
+            showAuthGate();
+            setAuthStatus('Oturum süresi doldu. Lütfen tekrar giriş yapın.', 'error');
+            return { ok: false, reason: 'auth' };
+          }
+          result = await fetchUsersWithToken(refreshedToken);
+          if (result.forbidden) {
+            await signOutSilently();
+            setAuthStatus(result.payload?.error || 'Kaydınız admin onayı bekliyor.', 'error');
+            return { ok: false, reason: 'auth' };
+          }
+          if (result.unauthorized) {
+            showAuthGate();
+            setAuthStatus('Oturum süresi doldu. Lütfen tekrar giriş yapın.', 'error');
+            return { ok: false, reason: 'auth' };
+          }
+        }
+
+        allUsers = result.data || [];
+        updateStats();
+        applyCategoryFilter();
+        usersLoaded = true;
+        return { ok: true, reason: 'ok' };
+      } catch (error) {
+        console.error('User load failed:', error);
+        loadingState.innerHTML = '<p style="color: #ff4d4f;">Yükleme hatası. Lütfen sayfayı yenileyin.</p>';
+        return { ok: false, reason: 'error' };
+      }
+    }
+
+    // ===== STATS & COUNTERS =====
+    function updateStats() {
+      const total = allUsers.length;
+      const jobSeekers = allUsers.filter(u => {
+        const status = normalizeText(u.is_arama_durumu);
+        return status.includes('evet');
+      }).length;
+      const freelancers = allUsers.filter(u => {
+        const status = normalizeText(u.freelance_aciklik);
+        return status && !status.startsWith('hay');
+      }).length;
+      const mentors = allUsers.filter(u => u.profesyonel_destek_verebilir).length;
+      const employers = allUsers.filter(u => {
+        const status = normalizeText(u.is_arama_durumu);
+        return status.includes('calisan') || status.includes('employer');
+      }).length;
+
+      statTotalUsers.textContent = total;
+      statJobSeekers.textContent = jobSeekers;
+      statFreelancers.textContent = freelancers;
+      statMentors.textContent = mentors;
+
+      countJobSeekers.textContent = jobSeekers;
+      countEmployers.textContent = employers;
+      countFreelancers.textContent = freelancers;
+      countMentors.textContent = mentors;
+    }
+
+    // ===== CATEGORY FILTERING =====
+    function applyCategoryFilter() {
+      let users = [...allUsers];
+
+      switch (currentCategory) {
+        case 'recent':
+          users.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+          if (!showingAll) users = users.slice(0, 10);
+          resultsTitle.textContent = showingAll ? 'Tüm Üyeler' : 'Son Katılan 10 Üye';
+          viewAllBtn.classList.toggle('hidden', showingAll || users.length < 10);
+          break;
+        case 'jobseeker':
+          users = users.filter(u => {
+            const status = normalizeText(u.is_arama_durumu);
+            return status.includes('evet');
+          });
+          resultsTitle.textContent = 'İş Arayanlar';
+          viewAllBtn.classList.add('hidden');
+          break;
+        case 'employer':
+          users = users.filter(u => {
+            const amac = normalizeText(u.katilma_amaci);
+            return amac.includes('takim') || amac.includes('eleman');
+          });
+          resultsTitle.textContent = 'İş Verenler / Ekipler';
+          viewAllBtn.classList.add('hidden');
+          break;
+        case 'freelance':
+          users = users.filter(u => {
+            const status = normalizeText(u.freelance_aciklik);
+            return status && !status.startsWith('hay');
+          });
+          resultsTitle.textContent = 'Freelancerlar';
+          viewAllBtn.classList.add('hidden');
+          break;
+        case 'mentor':
+          users = users.filter(u => u.profesyonel_destek_verebilir);
+          resultsTitle.textContent = 'Mentorlar';
+          viewAllBtn.classList.add('hidden');
+          break;
+      }
+
+      filteredUsers = users;
+      applyAdditionalFilters();
+    }
+
+    function applyAdditionalFilters() {
+      const keyword = normalizeText(keywordSearchInput.value);
+      const tokens = keyword ? keyword.split(/[\s,]+/).map(t => t.trim()).filter(Boolean) : [];
+      const filterState = readQuickFilterState();
+
+      const finalUsers = filteredUsers.filter(user => {
+        if (!matchesQuickFilters(user, filterState)) return false;
+        if (tokens.length === 0) return true;
+
+        const haystack = normalizeText([
+          user.ad_soyad, user.sehir, user.rol, user.deneyim_seviye, user.is_arama_durumu,
+          ...(user.guclu_alanlar || []), ...(user.programlama_dilleri || []),
+          ...(user.framework_platformlar || []), ...(user.devops_cloud || []),
+          ...(user.ilgi_konular || []), ...(user.ogrenmek_istenen || []),
+          ...(user.kullanilan_ide || []), ...(user.kullanilan_agent || []),
+        ].join(' '));
+
+        return tokens.every(token => haystack.includes(token));
+      });
+
+      displayUsers(finalUsers);
+    }
+
+    function readQuickFilterState() {
+      return {
+        activeJob: Boolean(filterActiveJobInput?.checked),
+        freelance: Boolean(filterFreelanceInput?.checked),
+        mentor: Boolean(filterMentorInput?.checked),
+        selectedExperience: expFilterInputs.filter(i => i.checked).map(i => i.value),
+      };
+    }
+
+    function matchesQuickFilters(user, filterState) {
+      if (filterState.activeJob) {
+        const status = normalizeText(user.is_arama_durumu);
+        if (!status.includes('evet aktif')) return false;
+      }
+      if (filterState.freelance) {
+        const status = normalizeText(user.freelance_aciklik);
+        if (!status || /^hay/.test(status)) return false;
+      }
+      if (filterState.mentor && !user.profesyonel_destek_verebilir) return false;
+      if (filterState.selectedExperience.length > 0) {
+        const bucket = getExperienceBucket(user.deneyim_seviye);
+        if (!filterState.selectedExperience.includes(bucket)) return false;
+      }
+      return true;
+    }
+
+    // ===== DISPLAY =====
+    function displayUsers(users) {
+      const loadingState = document.getElementById('loadingState');
+      const userGrid = document.getElementById('userGrid');
+      const emptyState = document.getElementById('emptyState');
+      const resultsCount = document.getElementById('resultsCount');
+
+      loadingState.classList.add('hidden');
+      resultsCount.textContent = `${users.length} üye`;
+
+      if (users.length === 0) {
+        userGrid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      userGrid.classList.remove('hidden');
+      userGrid.innerHTML = users.map(user => createUserCard(user)).join('');
+    }
+
+    function createUserCard(user) {
+      const techStack = [
+        ...(user.programlama_dilleri || []),
+        ...(user.framework_platformlar || []),
+        ...(user.devops_cloud || []),
+      ].slice(0, 8);
+
+      const badges = [];
+      if (user.is_arama_durumu === 'Evet, aktif') {
+        badges.push('<span class="badge badge-green">🟢 Aktif iş arıyor</span>');
+      } else if (user.is_arama_durumu === 'Evet, pasif (firsat olursa)') {
+        badges.push('<span class="badge">🔍 Pasif iş arıyor</span>');
+      }
+      if (user.freelance_aciklik && user.freelance_aciklik !== 'Hayir') {
+        badges.push('<span class="badge badge-blue">💼 Freelance açık</span>');
+      }
+      if (user.profesyonel_destek_verebilir) {
+        badges.push('<span class="badge badge-purple">🎓 Mentorluk verebilir</span>');
+      }
+
+      const safeLinkedinUrl = getSafeLinkedInUrl(user.linkedin_url);
+      const safeWhatsappUrl = user.whatsapp_tel && user.iletisim_izni
+        ? getSafeWhatsappUrl(user.whatsapp_tel)
+        : null;
+
+      const linkedinBtn = safeLinkedinUrl
+        ? `<a href="${escapeHtml(safeLinkedinUrl)}" target="_blank" rel="noopener noreferrer" class="action-btn">LinkedIn</a>`
+        : '';
+      const whatsappBtn = safeWhatsappUrl
+        ? `<a href="${escapeHtml(safeWhatsappUrl)}" target="_blank" rel="noopener noreferrer" class="action-btn">WhatsApp</a>`
+        : '';
+
+      return `
+        <div class="user-card">
+          <div class="user-card-main">
+            <div class="user-card-left">
+              <div class="user-header">
+                <div>
+                  <h3 class="user-name">${escapeHtml(user.ad_soyad)}</h3>
+                  <div class="user-role">${escapeHtml(user.rol || 'Developer')}</div>
+                </div>
+              </div>
+              ${badges.length > 0 ? `<div class="user-badges">${badges.join('')}</div>` : ''}
+              <div class="user-info">
+                ${user.sehir ? `<div class="info-row"><span class="info-icon">📍</span> ${escapeHtml(user.sehir)}</div>` : ''}
+                ${user.deneyim_seviye ? `<div class="info-row"><span class="info-icon">⭐</span> ${escapeHtml(user.deneyim_seviye)} deneyim</div>` : ''}
+                ${user.almanya_yasam ? `<div class="info-row"><span class="info-icon">🇩🇪</span> Almanya'da yaşıyor</div>` : ''}
+              </div>
+            </div>
+            <div class="user-card-right">
+              ${user.guclu_alanlar?.length > 0 ? `
+                <div class="section-title">Güçlü Alanlar</div>
+                <div class="tech-tags">
+                  ${user.guclu_alanlar.slice(0, 5).map(a => `<span class="tech-tag">${escapeHtml(a)}</span>`).join('')}
+                </div>
+              ` : ''}
+              ${techStack.length > 0 ? `
+                <div class="section-title">Teknoloji Stack</div>
+                <div class="tech-tags">
+                  ${techStack.map(t => `<span class="tech-tag">${escapeHtml(t)}</span>`).join('')}
+                </div>
+              ` : ''}
+              ${user.ilgi_konular?.length > 0 ? `
+                <div class="section-title">İlgi Alanları</div>
+                <div class="tech-tags">
+                  ${user.ilgi_konular.slice(0, 4).map(i => `<span class="tech-tag">${escapeHtml(i)}</span>`).join('')}
+                </div>
+              ` : ''}
+            </div>
+          </div>
+          ${(linkedinBtn || whatsappBtn) ? `
+            <div class="user-actions">
+              ${linkedinBtn}
+              ${whatsappBtn}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // ===== HELPERS =====
+    function normalizeText(value) {
+      return String(value || '').toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9,+\s()-]/g, '').trim();
+    }
+
+    function getExperienceBucket(value) {
+      const text = normalizeText(value);
+      if (!text) return '';
+      if (/\b10\s*\+/.test(text)) return '10+';
+      if (/\b5\s*-\s*10\b/.test(text)) return '5-10';
+      if (/\b3\s*-\s*5\b/.test(text)) return '3-5';
+      if (/\b1\s*-\s*3\b/.test(text)) return '1-3';
+      if (/\b0\s*-\s*1\b/.test(text)) return '0-1';
+      return '';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = typeof text === 'string' ? text : String(text ?? '');
+      return div.innerHTML;
+    }
+
+    function getSafeLinkedInUrl(rawUrl) {
+      if (typeof rawUrl !== 'string' || !rawUrl.trim()) return null;
+      try {
+        const url = new URL(rawUrl.trim());
+        const hostname = url.hostname.toLowerCase();
+        const isLinkedIn = hostname === 'linkedin.com' || hostname === 'www.linkedin.com' || hostname.endsWith('.linkedin.com');
+        if (!isLinkedIn || (url.protocol !== 'https:' && url.protocol !== 'http:')) return null;
+        return url.toString();
+      } catch { return null; }
+    }
+
+    function getSafeWhatsappUrl(rawPhone) {
+      if (typeof rawPhone !== 'string') return null;
+      const digits = rawPhone.replace(/[^0-9]/g, '');
+      if (digits.length < 8 || digits.length > 15) return null;
+      return `https://wa.me/${digits}`;
+    }
+
+    // ===== AUTH =====
+    function readEmailPassword() {
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Geçerli bir e-posta girin.');
+      if (password.length < 6) throw new Error('Şifre en az 6 karakter olmalı.');
+      return { email, password };
+    }
+
+    async function signInWithPassword() {
+      try {
+        const { email, password } = readEmailPassword();
+        setAuthStatus('Giriş yapılıyor...');
+        const client = getSupabaseClient();
+        const { error } = await withTimeout(
+          client.auth.signInWithPassword({ email, password }),
+          REQUEST_TIMEOUT_MS,
+          'Giriş süresi aşıldı.'
+        );
+        if (error) throw error;
+        setAuthStatus('Giriş başarılı.', 'success');
+      } catch (error) {
+        setAuthStatus(error.message || 'Giriş yapılamadı.', 'error');
+      }
+    }
+
+    async function signOut() {
+      const client = getSupabaseClient();
+      await client.auth.signOut();
+      showAuthGate();
+      location.reload();
+    }
+
+    async function signOutSilently() {
+      try {
+        const client = getSupabaseClient();
+        await client.auth.signOut();
+      } catch { }
+      showAuthGate();
+    }
+
+    // ===== PASSWORD RESET =====
+    function showPasswordResetModal() {
+      passwordResetModal.classList.remove('hidden');
+      resetEmail.value = emailInput.value || '';
+      resetStatusText.textContent = '';
+      resetStatusText.className = '';
+    }
+
+    function hidePasswordResetModal() {
+      passwordResetModal.classList.add('hidden');
+    }
+
+    async function sendPasswordReset() {
+      const email = resetEmail.value.trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        resetStatusText.textContent = 'Geçerli bir e-posta girin.';
+        resetStatusText.className = 'auth-status error';
+        return;
+      }
+
+      resetStatusText.textContent = 'Gönderiliyor...';
+      resetStatusText.className = '';
+
+      try {
+        const client = getSupabaseClient();
+        const { error } = await withTimeout(
+          client.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/devuser/reset-password.html',
+          }),
+          REQUEST_TIMEOUT_MS,
+          'İstek zaman aşımına uğradı.'
+        );
+        if (error) throw error;
+        resetStatusText.textContent = 'Şifre sıfırlama bağlantısı gönderildi. E-postanızı kontrol edin.';
+        resetStatusText.className = 'auth-status success';
+        setTimeout(hidePasswordResetModal, 2000);
+      } catch (error) {
+        resetStatusText.textContent = error.message || 'Gönderilemedi.';
+        resetStatusText.className = 'auth-status error';
+      }
+    }
+
+    // ===== INIT =====
+    async function initAuth() {
+      try {
+        const client = getSupabaseClient();
+        client.auth.onAuthStateChange((_event, session) => {
+          if (!session) {
+            showAuthGate();
+            return;
+          }
+          const nextUserId = String(session?.user?.id || '');
+          if (activeSessionUserId && activeSessionUserId !== nextUserId) {
+            usersLoaded = false;
+            allUsers = [];
+          }
+          activeSessionUserId = nextUserId;
+          loadUsers().then(result => {
+            if (result.ok || result.reason === 'error') showProtected(session);
+          });
+        });
+
+        const { data, error } = await client.auth.getSession();
+        if (error || !data.session) {
+          showAuthGate();
+          return;
+        }
+        activeSessionUserId = String(data.session?.user?.id || '');
+        const result = await loadUsers();
+        if (result.ok || result.reason === 'error') showProtected(data.session);
+      } catch (error) {
+        setAuthStatus(error.message || 'Auth başlatılamadı.', 'error');
+        showAuthGate();
+      }
+    }
+
+    // ===== EVENT LISTENERS =====
+    emailSignInBtn.addEventListener('click', signInWithPassword);
+    logoutBtn.addEventListener('click', signOut);
+    editProfileBtn.addEventListener('click', () => window.location.href = 'profile-edit.html');
+    forgotPasswordLink.addEventListener('click', (e) => { e.preventDefault(); showPasswordResetModal(); });
+    cancelResetBtn.addEventListener('click', hidePasswordResetModal);
+    sendResetBtn.addEventListener('click', sendPasswordReset);
+
+    emailInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); signInWithPassword(); }});
+    passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); signInWithPassword(); }});
+    resetEmail.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendPasswordReset(); }});
+
+    // Category buttons
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        showingAll = false;
+        applyCategoryFilter();
+      });
+    });
+
+    // View all button
+    viewAllBtn.addEventListener('click', () => {
+      showingAll = true;
+      viewAllBtn.classList.add('hidden');
+      applyCategoryFilter();
+    });
+
+    // Mobile filter toggle
+    mobileFilterToggle.addEventListener('click', () => {
+      sidebarContent.classList.toggle('open');
+      mobileFilterToggle.classList.toggle('open');
+    });
+
+    // Filter inputs
+    keywordSearchInput.addEventListener('input', applyAdditionalFilters);
+    filterActiveJobInput.addEventListener('change', applyAdditionalFilters);
+    filterFreelanceInput.addEventListener('change', applyAdditionalFilters);
+    filterMentorInput.addEventListener('change', applyAdditionalFilters);
+    expFilterInputs.forEach(input => input.addEventListener('change', applyAdditionalFilters));
+
+    // Init
+    initAuth();
+  </script>
+</body>
+
+</html>

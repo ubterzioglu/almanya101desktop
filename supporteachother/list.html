@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../img/icons/headericon.png" />
+  <title>Support Each Other - almanya101 | Almanya'daki Türk Developer'ları Keşfet</title>
+  <meta name="title" content="Support Each Other - almanya101">
+  <meta name="description"
+    content="Hep destek tam destek! Desteğe ihtiyaç duyduğunda yanında olacak insanları bul! Birlikte daha güçlüyuz!">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="stylesheet" href="list.css" />
+</head>
+
+<body>
+  <div class="container1">
+
+    <!-- Hero Card -->
+    <div class="card hero-card1">
+      <div class="hero-domain1">almanya101.de</div>
+      <h3>Destek Ara</h3>
+    </div>
+
+    <!-- Filter Card -->
+    <div class="card">
+      <h4 style="margin-top: 0; color: #F65314;">🔍 Filtrele</h4>
+      
+      <div class="filter-section">
+        <div class="filter-group">
+          <label>Şehir</label>
+          <input type="text" id="filterSehir" placeholder="Örn: Berlin, München">
+        </div>
+
+        <div class="filter-group">
+          <label>Rol</label>
+          <select id="filterRol">
+            <option value="">Tümü</option>
+            <option value="Software Developer">Software Developer</option>
+            <option value="QA / Test">QA / Test</option>
+            <option value="DevOps">DevOps</option>
+            <option value="Data / AI">Data / AI</option>
+            <option value="Product / Project">Product / Project</option>
+            <option value="UI/UX">UI/UX</option>
+            <option value="Öğrenci">Öğrenci</option>
+            <option value="Diğer">Diğer</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Deneyim</label>
+          <select id="filterDeneyim">
+            <option value="">Tümü</option>
+            <option value="0–1 yıl">0–1 yıl</option>
+            <option value="1–3 yıl">1–3 yıl</option>
+            <option value="3–5 yıl">3–5 yıl</option>
+            <option value="5–10 yıl">5–10 yıl</option>
+            <option value="10+ yıl">10+ yıl</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>İş Arama Durumu</label>
+          <select id="filterIsArama">
+            <option value="">Tümü</option>
+            <option value="Evet, aktif">Aktif iş arıyor</option>
+            <option value="Evet, pasif (fırsat olursa)">Pasif iş arıyor</option>
+            <option value="Sadece freelance bakıyorum">Freelance arıyor</option>
+            <option value="Hayır">İş aramıyor</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Teknoloji</label>
+          <input type="text" id="filterTech" placeholder="Örn: React, Python, AWS">
+        </div>
+
+        <div class="filter-group">
+          <label>İlgi Alanı</label>
+          <input type="text" id="filterIlgi" placeholder="Örn: AI, Startup, Freelance">
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn btn-primary" id="applyFilters">Filtrele</button>
+        <button class="btn btn-secondary" id="clearFilters">Temizle</button>
+      </div>
+    </div>
+
+    <!-- Results Count Card -->
+    <div class="results-count-card" id="resultsCountCard" style="display: none;">
+      <h4>👥 Topluluk Üyeleri</h4>
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading" id="loadingState">
+      <p>Üyeler yüklen iyor...</p>
+    </div>
+
+    <!-- User Grid (no outer card) -->
+    <div class="user-grid hidden" id="userGrid"></div>
+
+    <!-- Empty State -->
+    <div class="empty-state hidden" id="emptyState">
+      <h4>🔍 Sonuç bulunamadı</h4>
+      <p>Filtreleri değiştirerek tekrar deneyin.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script>
+    // Initialize Supabase
+    const { createClient } = supabase;
+    const supabaseClient = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+
+    let allUsers = [];
+
+    // Load users
+    async function loadUsers() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('supporteachother')
+          .select('*')
+          .eq('aratilabilir', true)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        allUsers = data || [];
+        displayUsers(allUsers);
+      } catch (error) {
+        // Error loading users
+        document.getElementById('loadingState').innerHTML = '<p style="color: #ff0000;">Yükleme hatası. Lütfen sayfayı yenileyin.</p>';
+      }
+    }
+
+    // Display users
+    function displayUsers(users) {
+      const loadingState = document.getElementById('loadingState');
+      const userGrid = document.getElementById('userGrid');
+      const emptyState = document.getElementById('emptyState');
+      const resultsCount = document.getElementById('resultsCount');
+
+      loadingState.classList.add('hidden');
+      const resultsCountCard = document.getElementById('resultsCountCard');
+
+      if (users.length === 0) {
+        userGrid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        resultsCountCard.style.display = 'none';
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      userGrid.classList.remove('hidden');
+      resultsCountCard.style.display = 'block';
+      resultsCount.textContent = `${users.length} üye`;
+
+      userGrid.innerHTML = users.map(user => createUserCard(user)).join('');
+    }
+
+    // Create user card HTML
+    function createUserCard(user) {
+      const techStack = [
+        ...(user.programlama_dilleri || []),
+        ...(user.framework_platformlar || []),
+        ...(user.devops_cloud || [])
+      ].slice(0, 8);
+
+      const badges = [];
+      if (user.is_arama_durumu === 'Evet, aktif') {
+        badges.push('<span class="badge badge-green">🟢 Aktif iş arıyor</span>');
+      } else if (user.is_arama_durumu === 'Evet, pasif (fırsat olursa)') {
+        badges.push('<span class="badge">🟡 Pasif iş arıyor</span>');
+      }
+      if (user.freelance_aciklik && user.freelance_aciklik !== 'Hayır') {
+        badges.push('<span class="badge">💼 Freelance açık</span>');
+      }
+      if (user.profesyonel_destek_verebilir) {
+        badges.push('<span class="badge">🎓 Mentorluk verebilir</span>');
+      }
+
+      const linkedinBtn = user.linkedin_url 
+        ? `<a href="${user.linkedin_url}" target="_blank" class="action-btn">LinkedIn</a>`
+        : '';
+      
+      const whatsappBtn = user.whatsapp_tel && user.iletisim_izni
+        ? `<a href="https://wa.me/${user.whatsapp_tel.replace(/[^0-9]/g, '')}" target="_blank" class="action-btn">WhatsApp</a>`
+        : '';
+
+      return `
+        <div class="user-card">
+          <div class="user-header">
+            <div>
+              <h3 class="user-name">${escapeHtml(user.ad_soyad)}</h3>
+              <div class="user-role">${escapeHtml(user.rol || 'Developer')}</div>
+            </div>
+          </div>
+
+          ${badges.length > 0 ? `<div class="user-badges">${badges.join('')}</div>` : ''}
+
+          <div class="user-info">
+            ${user.sehir ? `<div class="info-row"><span class="info-icon">📍</span> ${escapeHtml(user.sehir)}</div>` : ''}
+            ${user.deneyim_seviye ? `<div class="info-row"><span class="info-icon">⏱️</span> ${escapeHtml(user.deneyim_seviye)} deneyim</div>` : ''}
+            ${user.almanya_yasam ? `<div class="info-row"><span class="info-icon">🇩🇪</span> Almanya'da yaşıyor</div>` : ''}
+          </div>
+
+          ${user.guclu_alanlar && user.guclu_alanlar.length > 0 ? `
+            <div class="section-title">Güçlü Alanlar</div>
+            <div class="tech-tags">
+              ${user.guclu_alanlar.slice(0, 5).map(alan => `<span class="tech-tag">${escapeHtml(alan)}</span>`).join('')}
+            </div>
+          ` : ''}
+
+          ${techStack.length > 0 ? `
+            <div class="section-title">Teknoloji Stack</div>
+            <div class="tech-tags">
+              ${techStack.map(tech => `<span class="tech-tag">${escapeHtml(tech)}</span>`).join('')}
+            </div>
+          ` : ''}
+
+          ${user.ilgi_konular && user.ilgi_konular.length > 0 ? `
+            <div class="section-title">İlgi Alanları</div>
+            <div class="tech-tags">
+              ${user.ilgi_konular.slice(0, 4).map(ilgi => `<span class="tech-tag">${escapeHtml(ilgi)}</span>`).join('')}
+            </div>
+          ` : ''}
+
+          ${linkedinBtn || whatsappBtn ? `
+            <div class="user-actions">
+              ${linkedinBtn}
+              ${whatsappBtn}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Filter users
+    function filterUsers() {
+      const sehir = document.getElementById('filterSehir').value.toLowerCase().trim();
+      const rol = document.getElementById('filterRol').value;
+      const deneyim = document.getElementById('filterDeneyim').value;
+      const isArama = document.getElementById('filterIsArama').value;
+      const tech = document.getElementById('filterTech').value.toLowerCase().trim();
+      const ilgi = document.getElementById('filterIlgi').value.toLowerCase().trim();
+
+      // Check if any filter is active
+      const hasActiveFilter = sehir || rol || deneyim || isArama || tech || ilgi;
+      
+      // If no filters, show all
+      if (!hasActiveFilter) {
+        displayUsers(allUsers);
+        return;
+      }
+
+      const filtered = allUsers.filter(user => {
+        const matches = [];
+        
+        // Şehir match (OR logic for comma-separated values)
+        if (sehir) {
+          const sehirList = sehir.split(',').map(s => s.trim()).filter(s => s);
+          const sehirMatch = sehirList.some(s => user.sehir && user.sehir.toLowerCase().includes(s));
+          matches.push(sehirMatch);
+        }
+        
+        // Rol match
+        if (rol) {
+          matches.push(user.rol === rol);
+        }
+        
+        // Deneyim match
+        if (deneyim) {
+          matches.push(user.deneyim_seviye === deneyim);
+        }
+        
+        // İş arama match
+        if (isArama) {
+          matches.push(user.is_arama_durumu === isArama);
+        }
+        
+        // Teknoloji match (OR logic for comma-separated values)
+        if (tech) {
+          const techList = tech.split(',').map(t => t.trim()).filter(t => t);
+          const allTech = [
+            ...(user.programlama_dilleri || []),
+            ...(user.framework_platformlar || []),
+            ...(user.devops_cloud || [])
+          ].map(t => t.toLowerCase());
+          const techMatch = techList.some(t => allTech.some(ut => ut.includes(t)));
+          matches.push(techMatch);
+        }
+        
+        // İlgi alanı match (OR logic for comma-separated values)
+        if (ilgi) {
+          const ilgiList = ilgi.split(',').map(i => i.trim()).filter(i => i);
+          const allIlgi = (user.ilgi_konular || []).map(i => i.toLowerCase());
+          const ilgiMatch = ilgiList.some(i => allIlgi.some(ui => ui.includes(i)));
+          matches.push(ilgiMatch);
+        }
+        
+        // OR logic: return true if ANY filter matches
+        return matches.some(m => m === true);
+      });
+
+      displayUsers(filtered);
+    }
+
+    // Clear filters
+    function clearFilters() {
+      document.getElementById('filterSehir').value = '';
+      document.getElementById('filterRol').value = '';
+      document.getElementById('filterDeneyim').value = '';
+      document.getElementById('filterIsArama').value = '';
+      document.getElementById('filterTech').value = '';
+      document.getElementById('filterIlgi').value = '';
+      displayUsers(allUsers);
+    }
+
+    // Event listeners
+    document.getElementById('applyFilters').addEventListener('click', filterUsers);
+    document.getElementById('clearFilters').addEventListener('click', clearFilters);
+
+    // Load on page load
+    loadUsers();
+  </script>
+</body>
+
+</html>
