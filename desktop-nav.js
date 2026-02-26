@@ -22,7 +22,7 @@
     <nav class="desktop-nav" id="desktopNav">
       <div class="desktop-nav-inner">
         <a href="${base}index.html" class="desktop-logo">
-          <img src="${base}img/logoround.png" alt="almanya101">
+          <img src="${base}img/ui/logoround.png" alt="almanya101">
           <span>almanya101</span>
         </a>
         
