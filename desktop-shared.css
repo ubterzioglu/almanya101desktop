@@ -106,7 +106,7 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 .desktop-logo img {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
+  object-fit: contain;
 }
 
 .desktop-menu {
