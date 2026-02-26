@@ -26,10 +26,7 @@
           <span>almanya101</span>
         </a>
         
-        <span style="display: inline-flex; align-items: center; gap: 12px;">
-          <span style="color: rgba(255,255,255,0.3);">|</span>
-          <span style="font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.9);">yalnız değilsin! almanya101 seninle!</span>
-        </span>
+        <span style="font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.9);">yalnız değilsin! almanya101 seninle!</span>
         
         <div class="desktop-menu" style="position: absolute; right: 24px;">
           <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" class="desktop-menu-item primary">
