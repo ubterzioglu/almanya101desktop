@@ -286,7 +286,7 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 
 /* Hero Card */
 .hero-card {
-  background: linear-gradient(135deg, #FFBB00, #f7931e);
+  background: #000000;
   color: #fff;
   padding: var(--space-8);
   text-align: center;
