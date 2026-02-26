@@ -185,6 +185,23 @@
     /* Bizkimiz page: kartlar arası dikey boşluk */
     .container1 {
       gap: 15px;
+      max-width: 900px !important;
+    }
+    
+    /* Desktop: kartlar tam genişlik */
+    @media (min-width: 768px) {
+      .container1 {
+        max-width: 1000px !important;
+        padding: 24px !important;
+      }
+      .card, .detail-card {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .detail-card p {
+        font-size: 16px !important;
+        line-height: 1.7 !important;
+      }
     }
   </style>
 </head>
