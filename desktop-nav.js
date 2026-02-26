@@ -20,19 +20,42 @@
   // Desktop Nav HTML
   const navHTML = `
     <nav class="desktop-nav" id="desktopNav">
-      <div class="desktop-nav-inner" style="justify-content: center; position: relative;">
-        <a href="${base}index.html" class="desktop-logo" style="position: absolute; left: 24px;">
-          <img src="${base}akare.png" alt="almanya101" style="width: 42px; height: 42px; object-fit: contain; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-          <span>almanya101</span>
-        </a>
-        
-        <span style="font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.9);">yalnız değilsin! almanya101 seninle!</span>
-        
-        <div class="desktop-menu" style="position: absolute; right: 24px;">
-          <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" class="desktop-menu-item primary">
-            💬 WhatsApp
+      <div class="desktop-nav-inner" style="flex-direction: column; height: auto; padding: 16px 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; position: relative;">
+          <a href="${base}index.html" class="desktop-logo">
+            <img src="${base}akare.png" alt="almanya101" style="width: 42px; height: 42px; object-fit: contain; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+            <span>almanya101</span>
           </a>
-        </div>
+          
+          <span style="font-size: 27px; font-weight: 600; color: rgba(255,255,255,0.9);">yalnız değilsin! almanya101 seninle!</span>
+          
+          <div class="desktop-menu" style="flex-direction: column; align-items: flex-end; gap: 8px;">
+            <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" class="desktop-menu-item primary">
+              💬 WhatsApp
+            </a>
+            
+            <!-- Header Menu Dropdown -->
+            <details class="header-menu-dropdown">
+              <summary class="header-menu-dropdown-btn">
+                <span>📋 Menü</span>
+                <span class="header-menu-arrow">▼</span>
+              </summary>
+              <div class="header-menu-dropdown-content">
+                <a href="${base}maas/maas.html" class="header-menu-dropdown-item">💸 Maaş</a>
+                <a href="${base}vatandas/v.html" class="header-menu-dropdown-item">📝 Vatandaşlık</a>
+                <a href="${base}banka/banka.html" class="header-menu-dropdown-item">💳 Banka</a>
+                <a href="${base}sigorta/sigorta.html" class="header-menu-dropdown-item">🛡️ Sigorta</a>
+                <a href="${base}rehber/ua.html" class="header-menu-dropdown-item">👨‍⚕️ Uzman</a>
+                <a href="${base}paratransfer/pt.html" class="header-menu-dropdown-item">🔁 Para Transfer</a>
+                <a href="${base}article/article.html" class="header-menu-dropdown-item">📖 Yazılar</a>
+                <a href="${base}tatiltr/tatiltr.html" class="header-menu-dropdown-item">✈️ TR Tatil</a>
+                <a href="${base}tatilde/tatilde.html" class="header-menu-dropdown-item">🏖️ DE Tatil</a>
+                <a href="${base}join/join.html" class="header-menu-dropdown-item">👋 Katıl</a>
+                <a href="${base}bizkimiz/bizkimiz.html" class="header-menu-dropdown-item">🧑‍💻 Ekip</a>
+                <a href="${base}contact/contact.html" class="header-menu-dropdown-item">✉️ İletişim</a>
+              </div>
+            </details>
+          </div>
       </div>
     </nav>
   `;

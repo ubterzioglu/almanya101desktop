@@ -71,7 +71,7 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 .desktop-container {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: var(--container-padding);
+  padding: 12px 24px;
 }
 
 /* ---------- Desktop Navigation ---------- */
@@ -91,7 +91,7 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  height: 60px;
 }
 
 .desktop-logo {
@@ -138,6 +138,90 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 
 .desktop-menu-item.primary:hover {
   background: #20BA5A;
+}
+
+/* ---------- Header Menu Dropdown ---------- */
+.header-menu-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.header-menu-dropdown-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  background: var(--alm-yellow);
+  border-radius: 12px;
+  width: 100%;
+  user-select: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.header-menu-dropdown-btn:hover {
+  background: #e6a800;
+}
+
+.header-menu-dropdown-btn::-webkit-details-marker {
+  display: none;
+}
+
+.header-menu-arrow {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.header-menu-dropdown[open] .header-menu-arrow {
+  transform: rotate(180deg);
+}
+
+.header-menu-dropdown-content {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 180px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  animation: slideLeft 0.2s ease;
+  z-index: 1001;
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.header-menu-dropdown-item {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.header-menu-dropdown-item:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
 }
 
 /* Dropdown for more items */
@@ -210,17 +294,18 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 
 /* ---------- Main Layout ---------- */
 .desktop-main {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: var(--grid-gap);
-  margin-top: var(--space-6);
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
 }
 
-/* ---------- Sidebar ---------- */
-.desktop-sidebar {
+/* ---------- Content Area ---------- */
+.desktop-content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: 16px;
+  max-width: 1400px;
+  width: 100%;
 }
 
 .sidebar-card {
@@ -241,9 +326,9 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 0;
+  padding: 8px 0;
   border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: var(--text-sm);
+  font-size: 14px;
   color: rgba(255,255,255,0.8);
   cursor: pointer;
   transition: all 0.15s ease;
@@ -262,18 +347,50 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
   text-align: center;
 }
 
-/* ---------- Content Area ---------- */
-.desktop-content {
+/* ---------- Sidebar Accordion ---------- */
+.sidebar-accordion {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+.sidebar-accordion-summary {
   display: flex;
-  flex-direction: column;
-  gap: var(--grid-gap);
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--alm-yellow);
+  user-select: none;
+}
+
+.sidebar-accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-arrow {
+  font-size: 14px;
+  transition: transform 0.2s ease;
+  color: rgba(255,255,255,0.6);
+}
+
+.sidebar-accordion[open] .accordion-arrow {
+  transform: rotate(180deg);
+}
+
+.sidebar-accordion-content {
+  padding: 0 20px 16px;
 }
 
 /* ---------- Cards ---------- */
 .card {
   background: #fff;
   border-radius: var(--card-radius);
-  padding: var(--space-6);
+  padding: 20px;
   box-shadow: var(--card-shadow);
   position: relative;
 }
@@ -306,20 +423,20 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 }
 
 .hero-logo-img {
-  max-width: 400px;
+  max-width: 480px;
   height: auto;
-  margin: var(--space-6) auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  margin: 0 auto;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
 }
 
 /* ---------- Grid Layout for Cards ---------- */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--grid-gap);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
 }
 
-.card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.card-grid-2 { grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
 .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
 
@@ -331,24 +448,24 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 
 .nav-card .section-title {
   color: #000;
-  font-size: var(--text-xl);
+  font-size: 18px;
   font-weight: 700;
-  margin-bottom: var(--space-4);
+  margin-bottom: 16px;
 }
 
 .nav-item {
   background: #fff;
-  border-radius: 16px;
-  padding: var(--space-4);
+  border-radius: 12px;
+  padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 78px;
-  font-size: var(--text-base);
+  min-height: 56px;
+  font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0,0,0,.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
   transition: all 0.15s ease;
-  margin-bottom: var(--space-3);
+  margin-bottom: 0;
 }
 
 .nav-item:last-child { margin-bottom: 0; }
@@ -358,17 +475,17 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
   transform: translateX(8px);
 }
 
-.nav-icon { font-size: 20px; margin-right: 8px; }
+.nav-icon { font-size: 18px; margin-right: 8px; }
 
 .nav-desc {
   display: block;
   margin-top: 4px;
   opacity: 0.7;
-  font-size: var(--text-sm);
+  font-size: 12px;
 }
 
 .chevron {
-  font-size: 24px;
+  font-size: 20px;
   color: rgba(0,0,0,0.4);
   font-weight: 300;
 }
@@ -386,15 +503,15 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 18px 32px;
+  padding: 14px 28px;
   background: #25D366;
   color: #000;
   font-weight: 700;
-  font-size: 20px;
-  border-radius: 16px;
+  font-size: 18px;
+  border-radius: 14px;
   box-shadow: 0 8px 24px rgba(37,211,102,0.4);
   transition: all 0.2s ease;
-  margin-top: var(--space-4);
+  margin-top: 12px;
 }
 
 .whatsapp-cta-btn:hover {
@@ -403,9 +520,9 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
   filter: brightness(1.1);
 }
 
-.whatsapp-icon { font-size: 24px; }
+.whatsapp-icon { font-size: 22px; }
 
-.whatsapp-arrow { font-size: 20px; margin-left: 8px; color: #000; }
+.whatsapp-arrow { font-size: 18px; margin-left: 6px; color: #000; }
 
 /* ---------- Newsletter Card ---------- */
 .newsletter-card {
@@ -450,27 +567,27 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 
 /* ---------- Footer ---------- */
 .desktop-footer {
-  margin-top: var(--space-12);
-  padding: var(--space-8) 0;
+  margin-top: 16px;
+  padding: 14px 0;
   border-top: 1px solid rgba(255,255,255,0.1);
   text-align: center;
 }
 
 .footer-slogan {
-  font-size: var(--text-lg);
+  font-size: 14px;
   color: var(--alm-yellow);
   font-weight: 600;
-  margin-bottom: var(--space-2);
+  margin-bottom: 2px;
 }
 
 .footer-credit {
-  font-size: var(--text-sm);
+  font-size: 12px;
   color: rgba(255,255,255,0.6);
-  margin-bottom: var(--space-1);
+  margin-bottom: 2px;
 }
 
 .footer-copyright {
-  font-size: var(--text-sm);
+  font-size: 12px;
   color: rgba(255,255,255,0.4);
 }
 
@@ -483,7 +600,7 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 }
 
 .seo-accordion summary {
-  padding: var(--space-5);
+  padding: 10px 14px;
   cursor: pointer;
   list-style: none;
   display: flex;
@@ -493,26 +610,26 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 
 .seo-accordion summary h2 {
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: 14px;
 }
 
 .seo-accordion-content {
-  padding: 0 var(--space-5) var(--space-5);
+  padding: 0 14px 10px;
   border-top: 1px solid rgba(255,255,255,0.1);
-  padding-top: var(--space-5);
+  padding-top: 10px;
 }
 
 .seo-accordion-content h3 {
-  font-size: var(--text-base);
+  font-size: 13px;
   color: var(--alm-yellow);
-  margin: var(--space-5) 0 var(--space-3);
+  margin: 10px 0 6px;
 }
 
 .seo-accordion-content p {
-  font-size: var(--text-sm);
+  font-size: 12px;
   color: rgba(255,255,255,0.7);
-  line-height: 1.7;
-  margin-bottom: var(--space-3);
+  line-height: 1.5;
+  margin-bottom: 8px;
 }
 
 /* ---------- Mobile Breakpoint (Hide desktop nav on small screens) ---------- */
