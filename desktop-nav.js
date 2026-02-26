@@ -30,7 +30,7 @@
           <span style="font-size: 27px; font-weight: 600; color: rgba(255,255,255,0.9);">yalnız değilsin! almanya101 seninle!</span>
           
           <div class="desktop-menu" style="flex-direction: column; align-items: flex-end; gap: 8px;">
-            <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" class="desktop-menu-item primary">
+            <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" class="desktop-menu-item primary" style="background: #25D366 !important; color: #000 !important; font-weight: 700; padding: 10px 20px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,211,102,0.4); font-size: 15px;">
               💬 WhatsApp
             </a>
             
