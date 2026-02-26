@@ -24,40 +24,11 @@
         <a href="${base}index.html" class="desktop-logo">
           <img src="${base}akare.png" alt="almanya101" style="width: 42px; height: 42px; object-fit: contain; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
           <span>almanya101</span>
+          <span style="color: rgba(255,255,255,0.3); margin: 0 12px;">|</span>
+          <span style="font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8);">yalnız değilsin! almanya101 seninle!</span>
         </a>
         
         <div class="desktop-menu">
-          <a href="${base}maas/maas.html" class="desktop-menu-item">💰 Maaş</a>
-          <a href="${base}vatandas/v.html" class="desktop-menu-item">📝 Vatandaşlık</a>
-          <a href="${base}rehber/ua.html" class="desktop-menu-item">👨‍⚕️ Uzman</a>
-          <a href="${base}banka/banka.html" class="desktop-menu-item">🏦 Banka</a>
-          <a href="${base}sigorta/sigorta.html" class="desktop-menu-item">🛡️ Sigorta</a>
-          <div class="desktop-menu-more">
-            <button class="desktop-menu-more-btn">Diğer ▾</button>
-            <div class="desktop-dropdown">
-              <a href="${base}paratransfer/pt.html" class="desktop-dropdown-item">
-                <span class="desktop-dropdown-icon">🔁</span> Para Transferi
-              </a>
-              <a href="${base}tatiltr/tatiltr.html" class="desktop-dropdown-item">
-                <span class="desktop-dropdown-icon">✈️</span> Tatil TR
-              </a>
-              <a href="${base}tatilde/tatilde.html" class="desktop-dropdown-item">
-                <span class="desktop-dropdown-icon">🏖️</span> Tatil DE
-              </a>
-              <a href="${base}article/article.html" class="desktop-dropdown-item">
-                <span class="desktop-dropdown-icon">📝</span> Yazı Dizisi
-              </a>
-              <a href="${base}bizkimiz/bizkimiz.html" class="desktop-dropdown-item">
-                <span class="desktop-dropdown-icon">🧑‍💻</span> Biz Kimiz?
-              </a>
-              <a href="${base}join/join.html" class="desktop-dropdown-item">
-                <span class="desktop-dropdown-icon">🤝</span> Bize Katıl!
-              </a>
-              <a href="${base}contact/contact.html" class="desktop-dropdown-item">
-                <span class="desktop-dropdown-icon">✉️</span> İletişim
-              </a>
-            </div>
-          </div>
           <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" class="desktop-menu-item primary">
             💬 WhatsApp
           </a>
