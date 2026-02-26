@@ -168,83 +168,55 @@
 <body>
   <!-- Desktop Navigation -->
   <nav class="desktop-nav">
-    <div class="desktop-nav-inner" style="justify-content: center; position: relative;">
-      <a href="./index.html" class="desktop-logo" style="position: absolute; left: 24px;">
-        <img src="./akare.png" alt="almanya101" style="width: 42px; height: 42px; object-fit: contain; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-        <span>almanya101</span>
-      </a>
-      
-      <span style="font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.9);">yalnız değilsin! almanya101 seninle!</span>
-      
-      <div class="desktop-menu" style="position: absolute; right: 24px;">
-        <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" class="desktop-menu-item primary">
-          💬 WhatsApp
+    <div class="desktop-nav-inner" style="flex-direction: column; height: auto; padding: 16px 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; position: relative;">
+        <a href="./index.html" class="desktop-logo">
+          <img src="./akare.png" alt="almanya101" style="width: 42px; height: 42px; object-fit: contain; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+          <span>almanya101</span>
         </a>
-      </div>
+        
+        <span style="font-size: 27px; font-weight: 600; color: rgba(255,255,255,0.9);">yalnız değilsin! almanya101 seninle!</span>
+        
+        <div class="desktop-menu" style="flex-direction: column; align-items: flex-end; gap: 8px;">
+          <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" class="desktop-menu-item primary">
+            💬 WhatsApp
+          </a>
+          
+          <!-- Header Menu Dropdown -->
+          <details class="header-menu-dropdown">
+            <summary class="header-menu-dropdown-btn">
+              <span>📋 Menü</span>
+              <span class="header-menu-arrow">▼</span>
+            </summary>
+            <div class="header-menu-dropdown-content">
+              <a href="./maas/maas.html" class="header-menu-dropdown-item">💸 Maaş</a>
+              <a href="./vatandas/v.html" class="header-menu-dropdown-item">📝 Vatandaşlık</a>
+              <a href="./banka/banka.html" class="header-menu-dropdown-item">💳 Banka</a>
+              <a href="./sigorta/sigorta.html" class="header-menu-dropdown-item">🛡️ Sigorta</a>
+              <a href="./rehber/ua.html" class="header-menu-dropdown-item">👨‍⚕️ Uzman</a>
+              <a href="./paratransfer/pt.html" class="header-menu-dropdown-item">🔁 Para Transfer</a>
+              <a href="./article/article.html" class="header-menu-dropdown-item">📖 Yazılar</a>
+              <a href="./tatiltr/tatiltr.html" class="header-menu-dropdown-item">✈️ TR Tatil</a>
+              <a href="./tatilde/tatilde.html" class="header-menu-dropdown-item">🏖️ DE Tatil</a>
+              <a href="./join/join.html" class="header-menu-dropdown-item">👋 Katıl</a>
+              <a href="./bizkimiz/bizkimiz.html" class="header-menu-dropdown-item">🧑‍💻 Ekip</a>
+              <a href="./contact/contact.html" class="header-menu-dropdown-item">✉️ İletişim</a>
+            </div>
+          </details>
+        </div>
     </div>
   </nav>
 
   <!-- Main Container -->
   <div class="desktop-container">
     <div class="desktop-main">
-      <!-- Sidebar -->
-      <aside class="desktop-sidebar">
-        <div class="sidebar-card">
-          <h3>🚀 Hızlı Erişim</h3>
-          <a href="./maas/maas.html" class="sidebar-link">
-            <span class="sidebar-link-icon">💸</span> Brütten Nete Maaş
-          </a>
-          <a href="./vatandas/v.html" class="sidebar-link">
-            <span class="sidebar-link-icon">📝</span> Vatandaşlık Testi
-          </a>
-          <a href="./banka/banka.html" class="sidebar-link">
-            <span class="sidebar-link-icon">💳</span> Banka Seçim Aracı
-          </a>
-          <a href="./sigorta/sigorta.html" class="sidebar-link">
-            <span class="sidebar-link-icon">🛡️</span> Sigorta Aracı
-          </a>
-          <a href="./rehber/ua.html" class="sidebar-link">
-            <span class="sidebar-link-icon">👨‍⚕️</span> Türk Uzman Ara
-          </a>
-          <a href="./paratransfer/pt.html" class="sidebar-link">
-            <span class="sidebar-link-icon">🔁</span> Para Transferi
-          </a>
-        </div>
-
-        <div class="sidebar-card">
-          <h3>📚 Rehberler</h3>
-          <a href="./article/article.html" class="sidebar-link">
-            <span class="sidebar-link-icon">📖</span> Yazı Dizisi
-          </a>
-          <a href="./tatiltr/tatiltr.html" class="sidebar-link">
-            <span class="sidebar-link-icon">✈️</span> TR Tatil 2026
-          </a>
-          <a href="./tatilde/tatilde.html" class="sidebar-link">
-            <span class="sidebar-link-icon">🏖️</span> DE Tatil 2026
-          </a>
-        </div>
-
-        <div class="sidebar-card">
-          <h3>🤝 Topluluk</h3>
-          <a href="./join/join.html" class="sidebar-link">
-            <span class="sidebar-link-icon">👋</span> Bize Katıl
-          </a>
-          <a href="./bizkimiz/bizkimiz.html" class="sidebar-link">
-            <span class="sidebar-link-icon">🧑‍💻</span> Ekibimiz
-          </a>
-          <a href="./contact/contact.html" class="sidebar-link">
-            <span class="sidebar-link-icon">✉️</span> İletişim
-          </a>
-        </div>
-      </aside>
-
       <!-- Content Area -->
-      <main class="desktop-content">
+      <main class="desktop-content" style="max-width: 1400px;">
         <!-- Hero Card -->
-        <div class="card hero-card" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-          <img src="./img/almanya101.png" alt="almanya101 Logo" class="hero-logo-img" style="margin: 0 auto 24px auto; order: -1; width: 100%; max-width: 600px;">
-          <h1 style="font-family: 'Quicksand', sans-serif; font-weight: 700; letter-spacing: 1px; max-width: 600px; width: 100%;">Almanya Türk Expat Rehberi</h1>
-          <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" rel="noopener" class="whatsapp-cta-btn" style="margin: 24px auto 0 auto; width: 100%; max-width: 580px; box-sizing: border-box;">
+        <div class="card hero-card" style="text-align: center; display: flex; flex-direction: column; align-items: center; padding: 16px;">
+          <img src="./img/almanya101.png" alt="almanya101 Logo" class="hero-logo-img" style="margin: 0 auto 12px auto; order: -1; width: 100%; max-width: 480px;">
+          <h1 style="font-family: 'Quicksand', sans-serif; font-weight: 700; letter-spacing: 1px; max-width: 480px; width: 100%; font-size: 22px;">Almanya Türk Expat Rehberi</h1>
+          <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" rel="noopener" class="whatsapp-cta-btn" style="margin: 12px auto 0 auto; width: 100%; max-width: 460px; box-sizing: border-box; padding: 14px 24px; font-size: 16px;">
             <span class="whatsapp-icon">💬</span>
             <span style="color: #000;">WhatsApp Topluluğumuza Katıl</span>
             <span class="whatsapp-arrow">›</span>
@@ -359,6 +331,13 @@
               <span class="chevron">›</span>
             </div>
           </div>
+
+          <!-- WhatsApp CTA Button -->
+          <a href="https://chat.whatsapp.com/JXzMvjJoc57EKDDABSB0jo" target="_blank" rel="noopener" class="whatsapp-cta-btn" style="margin-top: 16px;">
+            <span class="whatsapp-icon">💬</span>
+            <span style="color: #000;">WhatsApp Topluluğumuza Katıl</span>
+            <span class="whatsapp-arrow">›</span>
+          </a>
         </div>
 
         <!-- SEO Accordion -->
