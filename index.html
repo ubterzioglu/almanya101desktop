@@ -279,17 +279,6 @@
           </a>
         </div>
 
-        <!-- Newsletter Card -->
-        <div class="card newsletter-card">
-          <h2 class="section-title">📧 Bültene Üye Ol</h2>
-          <p style="font-size: 16px; opacity: 0.9;">Kısa duyurular ve yeni içerikler için e-posta bırakın.</p>
-          <div class="newsletter-form">
-            <input id="newsletterEmail" type="email" placeholder="email@ornek.com" />
-            <button id="newsletterBtn">Gönder</button>
-          </div>
-          <div id="newsletterStatus" style="margin-top: 12px; font-size: 14px;"></div>
-        </div>
-
         <!-- Main Navigation Grid -->
         <div class="card nav-card">
           <h2 class="section-title">🧭 Araçlar ve Rehberler</h2>
@@ -440,41 +429,6 @@
   </div>
 
   <!-- Scripts -->
-  <script>
-    // Newsletter subscription
-    (function () {
-      const btn = document.getElementById('newsletterBtn');
-      const input = document.getElementById('newsletterEmail');
-      const status = document.getElementById('newsletterStatus');
-
-      if (!btn || !input) return;
-
-      btn.addEventListener('click', async () => {
-        const email = String(input.value || '').trim();
-        if (!email || !email.includes('@')) {
-          status.textContent = 'Lütfen geçerli bir e-posta yaz.';
-          return;
-        }
-        btn.disabled = true;
-        status.textContent = 'Gönderiliyor...';
-        try {
-          const r = await fetch('/api/newsletter-subscribe', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-          });
-          const data = await r.json();
-          if (!r.ok) throw new Error(data.error || 'Hata');
-          status.textContent = 'Bültene üye oldun! Teşekkürler!';
-          input.value = '';
-        } catch (e) {
-          status.textContent = 'Gönderilemedi.';
-        } finally {
-          btn.disabled = false;
-        }
-      });
-    })();
-  </script>
 
   <!-- GoatCounter Analytics -->
   <script data-goatcounter="https://almanya101de.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
