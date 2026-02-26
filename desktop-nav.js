@@ -36,7 +36,7 @@
             
             <!-- Header Menu Dropdown -->
             <details class="header-menu-dropdown">
-              <summary class="header-menu-dropdown-btn" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; padding: 10px 16px !important; cursor: pointer !important; list-style: none !important; font-size: 14px !important; font-weight: 600 !important; color: #000 !important; background: #FFBB00 !important; border-radius: 12px !important; width: 100% !important; user-select: none !important; transition: all 0.2s ease !important;">
+              <summary id="desktopMenuBtn" class="header-menu-dropdown-btn" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; padding: 10px 16px !important; cursor: pointer !important; list-style: none !important; font-size: 14px !important; font-weight: 600 !important; color: #000 !important; background: #FFBB00 !important; border-radius: 12px !important; width: 100% !important; user-select: none !important; transition: all 0.2s ease !important;">
                 <span>📋 Menü</span>
                 <span class="header-menu-arrow" style="font-size: 12px !important; transition: transform 0.2s ease !important;">▼</span>
               </summary>
