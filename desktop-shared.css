@@ -132,12 +132,12 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
 }
 
 .desktop-menu-item.primary {
-  background: var(--alm-orange);
+  background: #25D366;
   color: #000;
 }
 
 .desktop-menu-item.primary:hover {
-  background: #ff7a45;
+  background: #20BA5A;
 }
 
 /* Dropdown for more items */
