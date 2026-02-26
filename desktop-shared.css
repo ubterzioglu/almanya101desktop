@@ -504,8 +504,8 @@ a:hover { opacity: 0.85; transition: opacity 0.2s ease; }
   justify-content: center;
   gap: 12px;
   padding: 14px 28px;
-  background: #25D366;
-  color: #000;
+  background: #25D366 !important;
+  color: #000 !important;
   font-weight: 700;
   font-size: 18px;
   border-radius: 14px;
