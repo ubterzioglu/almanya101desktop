@@ -25,7 +25,7 @@
           <img src="${base}akare.png" alt="almanya101" style="width: 42px; height: 42px; object-fit: contain; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
           <span>almanya101</span>
           <span style="color: rgba(255,255,255,0.3); margin: 0 12px;">|</span>
-          <span style="font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8);">yalnız değilsin! almanya101 seninle!</span>
+          <span style="font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.9);">yalnız değilsin! almanya101 seninle!</span>
         </a>
         
         <div class="desktop-menu">
