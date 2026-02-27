@@ -358,18 +358,14 @@
       });
       
       // Desktop header'daki Menü butonu da drawer'ı açsın
-      document.addEventListener('click', function(e) {
-        const menuBtn = e.target.closest('#desktopMenuBtn');
-        if (menuBtn) {
+      const desktopMenuBtn = document.getElementById('desktopMenuBtn');
+      if (desktopMenuBtn) {
+        desktopMenuBtn.addEventListener('click', function(e) {
           e.preventDefault();
           e.stopPropagation();
-          // Dropdown'ı kapat
-          const details = menuBtn.closest('details');
-          if (details) details.removeAttribute('open');
-          // Drawer'ı aç
           toggleMenu();
-        }
-      });
+        });
+      }
     })();
   </script>
 

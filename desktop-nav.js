@@ -34,27 +34,10 @@
               💬 WhatsApp
             </a>
             
-            <!-- Header Menu Dropdown -->
-            <details class="header-menu-dropdown">
-              <summary id="desktopMenuBtn" class="header-menu-dropdown-btn" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; padding: 10px 16px !important; cursor: pointer !important; list-style: none !important; font-size: 14px !important; font-weight: 600 !important; color: #000 !important; background: #FFBB00 !important; border-radius: 12px !important; width: 100% !important; user-select: none !important; transition: all 0.2s ease !important;">
-                <span>📋 Menü</span>
-                <span class="header-menu-arrow" style="font-size: 12px !important; transition: transform 0.2s ease !important;">▼</span>
-              </summary>
-              <div class="header-menu-dropdown-content">
-                <a href="${base}maas/maas.html" class="header-menu-dropdown-item">💸 Maaş</a>
-                <a href="${base}vatandas/v.html" class="header-menu-dropdown-item">📝 Vatandaşlık</a>
-                <a href="${base}banka/banka.html" class="header-menu-dropdown-item">💳 Banka</a>
-                <a href="${base}sigorta/sigorta.html" class="header-menu-dropdown-item">🛡️ Sigorta</a>
-                <a href="${base}rehber/ua.html" class="header-menu-dropdown-item">👨‍⚕️ Uzman</a>
-                <a href="${base}paratransfer/pt.html" class="header-menu-dropdown-item">🔁 Para Transfer</a>
-                <a href="${base}article/article.html" class="header-menu-dropdown-item">📖 Yazılar</a>
-                <a href="${base}tatiltr/tatiltr.html" class="header-menu-dropdown-item">✈️ TR Tatil</a>
-                <a href="${base}tatilde/tatilde.html" class="header-menu-dropdown-item">🏖️ DE Tatil</a>
-                <a href="${base}join/join.html" class="header-menu-dropdown-item">👋 Katıl</a>
-                <a href="${base}bizkimiz/bizkimiz.html" class="header-menu-dropdown-item">🧑‍💻 Ekip</a>
-                <a href="${base}contact/contact.html" class="header-menu-dropdown-item">✉️ İletişim</a>
-              </div>
-            </details>
+            <!-- Header Menu Button - triggers drawer if available -->
+            <button id="desktopMenuBtn" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; padding: 10px 16px !important; cursor: pointer !important; font-size: 14px !important; font-weight: 600 !important; color: #000 !important; background: #FFBB00 !important; border: none !important; border-radius: 12px !important; width: 100% !important; user-select: none !important; transition: all 0.2s ease !important;">
+              <span>📋 Menü</span>
+            </button>
           </div>
       </div>
     </nav>
